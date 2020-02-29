@@ -119,6 +119,14 @@ void TrussElementLinear3D2N::CalculateLeftHandSide(
     rLeftHandSideMatrix = ZeroMatrix(msLocalSize, msLocalSize);
     // creating LHS
     rLeftHandSideMatrix = CreateElementStiffnessMatrix(rCurrentProcessInfo);
+
+    switch (this->Id())
+    {
+        case 1:
+            KRATOS_WATCH(rLeftHandSideMatrix);
+            break;
+    }
+
     KRATOS_CATCH("")
 }
 

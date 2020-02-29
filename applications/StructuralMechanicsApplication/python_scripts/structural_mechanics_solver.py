@@ -227,7 +227,7 @@ class MechanicalSolver(PythonSolver):
 
     def SolveSolutionStep(self):
         model_part_nodes = self.main_model_part.Nodes
-        print("::BEFORE SSS::")
+        print("\n::BEFORE SSS::")
         for node in model_part_nodes:
             if node.Id < 6:
                 print(node.Id, node.X, node.Y, node.Z)

@@ -1490,6 +1490,15 @@ void ShellThickElement3D4N::CalculateAll(MatrixType& rLeftHandSideMatrix,
 
     // Add body forces contributions. This doesn't depend on the coordinate system
     AddBodyForces(dArea, rRightHandSideVector);
+
+    
+    switch (this->Id())
+    {
+        case 1:
+            KRATOS_WATCH(rLeftHandSideMatrix);
+            break;
+    }
+    
 }
 
 void ShellThickElement3D4N::AddBodyForces(const array_1d<double,4>& dA, VectorType& rRightHandSideVector)

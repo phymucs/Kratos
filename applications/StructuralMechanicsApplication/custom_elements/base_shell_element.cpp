@@ -288,6 +288,23 @@ void BaseShellElement::CalculateLeftHandSide(MatrixType& rLeftHandSideMatrix,
     Vector dummy;
     CalculateAll(rLeftHandSideMatrix, dummy, rCurrentProcessInfo,
                  calculate_stiffness_matrix_flag, calculate_residual_vector_flag);
+
+    // Print LHS
+    switch (this->Id())
+    {
+        case 1:
+            KRATOS_WATCH(rLeftHandSideMatrix);
+            break;
+        case 5:
+            KRATOS_WATCH(rLeftHandSideMatrix);
+            break;
+        case 12:
+            KRATOS_WATCH(rLeftHandSideMatrix);
+            break;
+        default:
+            break;
+    }
+
 }
 
 void BaseShellElement::CalculateRightHandSide(VectorType& rRightHandSideVector,

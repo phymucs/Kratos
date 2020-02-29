@@ -1958,6 +1958,13 @@ void ShellThinElement3D4N::CalculateAll(MatrixType& rLeftHandSideMatrix,
     // Add body forces contributions. This doesn't depend on the coordinate
     // system
     AddBodyForces(data, rRightHandSideVector);
+
+    switch (this->Id())
+    {
+        case 1:
+            KRATOS_WATCH(rLeftHandSideMatrix);
+            break;
+    }
 }
 
 bool ShellThinElement3D4N::
