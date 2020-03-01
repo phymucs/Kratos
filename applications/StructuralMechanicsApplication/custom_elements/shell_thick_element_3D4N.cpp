@@ -1492,12 +1492,12 @@ void ShellThickElement3D4N::CalculateAll(MatrixType& rLeftHandSideMatrix,
     AddBodyForces(dArea, rRightHandSideVector);
 
     
-    switch (this->Id())
-    {
-        case 1:
-            KRATOS_WATCH(rLeftHandSideMatrix);
-            break;
-    }
+    // switch (this->Id())
+    // {
+    //     case 1:
+    //         KRATOS_WATCH(rLeftHandSideMatrix);
+    //         break;
+    // }
     
 }
 
