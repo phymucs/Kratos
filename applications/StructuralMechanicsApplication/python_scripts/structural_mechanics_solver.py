@@ -227,6 +227,7 @@ class MechanicalSolver(PythonSolver):
 
     def SolveSolutionStep(self):
         model_part_nodes = self.main_model_part.Nodes
+
         print("\n::BEFORE SSS::")
         for node in model_part_nodes:
             if node.Id < 6:
@@ -242,6 +243,7 @@ class MechanicalSolver(PythonSolver):
                 print(node.Id, node.X, node.Y, node.Z)
             elif node.Id == 88:
                 print(node.Id, node.X, node.Y, node.Z)
+                print(node.GetSolutionStepValue(KratosMultiphysics.DISPLACEMENT))
                 
         if not is_converged:
             msg  = "Solver did not converge for step " + str(self.main_model_part.ProcessInfo[KratosMultiphysics.STEP]) + "\n"
@@ -468,11 +470,11 @@ class MechanicalSolver(PythonSolver):
     def _create_linear_strategy(self):
         computing_model_part = self.GetComputingModelPart()
 
-        print("::COMPUTING MODELPART::")
-        model_part_nodes = computing_model_part.Nodes
-        for node in model_part_nodes:
-            if node.Id < 6:
-                print(node.Id, node.X, node.Y, node.Z)
+        # print("::COMPUTING MODELPART::")
+        # model_part_nodes = computing_model_part.Nodes
+        # for node in model_part_nodes:
+        #     if node.Id < 6:
+        #         print(node.Id, node.X, node.Y, node.Z)
 
         mechanical_scheme = self.get_solution_scheme()
         linear_solver = self.get_linear_solver()

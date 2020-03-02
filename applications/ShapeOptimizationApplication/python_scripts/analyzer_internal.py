@@ -36,14 +36,12 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
         self.model_part_controller = model_part_controller
         self.specified_responses = specified_responses
         self.model = model_part_controller.GetModel()
-        print("::Response Object Creation Skipped::")
+        #print("::Response Object Creation Skipped::")
         
         # for (response_id, response_settings) in specified_responses:
         #     #print("CALLED:::", response_id, response_settings)           
             
         #     self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, model)    
-        
-        #print("MODEL:::", model)
     #---------------------------------------------------------------------------
     def DirForOptimization(self, OptiFile, itr , FolderName):
         shutil.copy(OptiFile, str(itr)+ "_ITR" + ".post.bin")            
@@ -72,17 +70,29 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             x.append(node.X)
             y.append(node.Y)
             z.append(node.Z)
-            if node.Id < 6:
-                print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
+            # if node.Id < 6:
+            #     print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
+            # elif node.Id == 88:
+            #     print(node.Id, node.X, node.Y, node.Z)
+            print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
        
         time_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.TIME)
         step_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.STEP)
         delta_time_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.DELTA_TIME)
 
-        self.response_functions = {}
+        
+        if optimizationIteration == 1:
+            self.response_functions = {}
+            for (response_id, response_settings) in self.specified_responses:
+                self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model)  
+        
+        else:    
+            for identifier, response in self.response_functions.items():
+                response.model.DeleteModelPart(response.primal_model_part.Name)
+                print("::Delete::", response.primal_model_part.Name)
+            for (response_id, response_settings) in self.specified_responses:
+                self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model)
 
-        for (response_id, response_settings) in self.specified_responses:
-            self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model)    
         
         for identifier, response in self.response_functions.items():        
 
@@ -91,20 +101,7 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             optimization_model_part.ProcessInfo.SetValue(km.TIME, time_before_analysis-1)
             optimization_model_part.ProcessInfo.SetValue(km.DELTA_TIME, 0)
 
-            print("::Model Before::", response.model)
-
-            # if optimizationIteration == 1:
-            #     response.Process_Info = response.model[response.primal_model_part.Name].ProcessInfo
-            
-            # print("::ITR_1_ProInfo::", response.Process_Info)
-            
-
-            # if optimizationIteration != 1:                
-            #     response.model.DeleteModelPart(response.primal_model_part.Name)
-            #     response.primal_model_part = response.model.CreateModelPart(response.primal_model_part.Name)
-            #     response.model[response.primal_model_part.Name].ProcessInfo = response.Process_Info
-            #     print("::ProcessInfo::", response.Process_Info)
-            #     print("::Model After::", response.model)
+            #print("::Model Before::", response.model)
 
             response.Initialize()
 
@@ -112,11 +109,9 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
                 node.X = x[node.Id-1]
                 node.Y = y[node.Id-1]
                 node.Z = z[node.Id-1]
-                # if node.Id < 6:
-                #print(node.Id, node.X, node.Y, node.Z)
 
             KSO.MeshControllerUtilities(response.primal_model_part).SetReferenceMeshToMesh()
-            print("::Nodes Transfered::")
+            print("::Nodes Transfered from OPTI MODELPART TO PRIMAL MODELPART::")
             
             response.InitializeSolutionStep()
 
@@ -137,33 +132,13 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             optimization_model_part.ProcessInfo.SetValue(km.TIME, time_before_analysis)
             optimization_model_part.ProcessInfo.SetValue(km.DELTA_TIME, delta_time_before_analysis)
 
-            # print("::OPTI MODEL:2:")
-            # for node in model_part_nodes:
-            #     if node.Id < 6:
-            #         print(node.Id, node.X, node.Y, node.Z)
-
             self.model_part_controller.SetMeshToReferenceMesh()
-
-            # print("::OPTI MODEL:3:")
-            # for node in model_part_nodes:
-            #     if node.Id < 6:
-            #         print(node.Id, node.X, node.Y, node.Z)
 
             self.model_part_controller.SetDeformationVariablesToZero()
 
-            # print("::PRIMAL:1:")
-            # for node in response.primal_model_part.Nodes:
-            #     if node.Id < 6:
-            #         print(node.Id, node.X, node.Y, node.Z)
-
             KSO.MeshControllerUtilities(response.primal_model_part).SetMeshToReferenceMesh()
-
-            # print("::PRIMAL:2:")
-            # for node in response.primal_model_part.Nodes:
-            #     if node.Id < 6:
-            #         print(node.Id, node.X, node.Y, node.Z)
             
-            KSO.MeshControllerUtilities(response.primal_model_part).SetDeformationVariablesToZero()            
+            KSO.MeshControllerUtilities(response.primal_model_part).SetDeformationVariablesToZero()        
 
     # --------------------------------------------------------------------------
     def FinalizeAfterOptimizationLoop( self ):

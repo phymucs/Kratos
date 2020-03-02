@@ -91,7 +91,7 @@ class StrainEnergyResponseFunction(ResponseFunctionBase):
 
         self.response_function_utility = StructuralMechanicsApplication.StrainEnergyResponseFunctionUtility(self.primal_model_part, response_settings)
 
-        # self.model = model
+        self.model = model
 
         # self.Process_Info = self.primal_model_part.ProcessInfo
         # self.process_info_dict = {}
