@@ -117,12 +117,12 @@ void CrBeamElementLinear3D2N::CalculateLeftHandSide(
     noalias(rLeftHandSideMatrix) =
         prod(aux_matrix, Matrix(trans(transformation_matrix)));
     
-    switch (this->Id())
-    {
-        case 1:
-            KRATOS_WATCH(rLeftHandSideMatrix);
-            break;
-    }
+    // switch (this->Id())
+    // {
+    //     case 1:
+    //         KRATOS_WATCH(rLeftHandSideMatrix);
+    //         break;
+    // }
 
     KRATOS_CATCH("")
     

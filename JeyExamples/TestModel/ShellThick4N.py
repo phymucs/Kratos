@@ -45,7 +45,7 @@ if __name__ == "__main__":
     time = simulation._GetSolver().AdvanceInTime(time)
     simulation.InitializeSolutionStep()
 
-    simulation._GetSolver().Predict()
+    simulation._GetSolver().Predict()       #ignore and check the domain size, bc load =0
     simulation._GetSolver().SolveSolutionStep()
 
     simulation.FinalizeSolutionStep()

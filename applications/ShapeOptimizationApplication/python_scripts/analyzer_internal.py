@@ -32,15 +32,16 @@ import glob, os
 class KratosInternalAnalyzer( AnalyzerBaseClass ):
     # --------------------------------------------------------------------------
     def __init__( self, specified_responses, model_part_controller ):
-        self.response_functions = {}
+        # self.response_functions = {}
         self.model_part_controller = model_part_controller
-        model = model_part_controller.GetModel()
-        #print("MODEL:::", model)
+        self.specified_responses = specified_responses
+        self.model = model_part_controller.GetModel()
+        print("::Response Object Creation Skipped::")
         
-        for (response_id, response_settings) in specified_responses:
-            #print("CALLED:::", response_id, response_settings)           
+        # for (response_id, response_settings) in specified_responses:
+        #     #print("CALLED:::", response_id, response_settings)           
             
-            self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, model)    
+        #     self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, model)    
         
         #print("MODEL:::", model)
     #---------------------------------------------------------------------------
@@ -55,8 +56,9 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             shutil.move(file, dst)
     
     def InitializeBeforeOptimizationLoop( self ):
-        for response in self.response_functions.values():
-            response.Initialize()
+        # for response in self.response_functions.values():
+        #     response.Initialize()
+        print("::InitOpti Ignored")
     # --------------------------------------------------------------------------
     def AnalyzeDesignAndReportToCommunicator( self, currentDesign, optimizationIteration, communicator ):
         
@@ -70,12 +72,17 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             x.append(node.X)
             y.append(node.Y)
             z.append(node.Z)
-            #if node.Id < 6:
-            print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
+            if node.Id < 6:
+                print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
        
         time_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.TIME)
         step_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.STEP)
         delta_time_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.DELTA_TIME)
+
+        self.response_functions = {}
+
+        for (response_id, response_settings) in self.specified_responses:
+            self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model)    
         
         for identifier, response in self.response_functions.items():        
 
@@ -84,10 +91,23 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             optimization_model_part.ProcessInfo.SetValue(km.TIME, time_before_analysis-1)
             optimization_model_part.ProcessInfo.SetValue(km.DELTA_TIME, 0)
 
-            # print("::PRIMAL::")
-            # for node in response.primal_model_part.Nodes:
-            #     if node.Id < 6:
-            #         print(node.Id, node.X, node.Y, node.Z)
+            print("::Model Before::", response.model)
+
+            # if optimizationIteration == 1:
+            #     response.Process_Info = response.model[response.primal_model_part.Name].ProcessInfo
+            
+            # print("::ITR_1_ProInfo::", response.Process_Info)
+            
+
+            # if optimizationIteration != 1:                
+            #     response.model.DeleteModelPart(response.primal_model_part.Name)
+            #     response.primal_model_part = response.model.CreateModelPart(response.primal_model_part.Name)
+            #     response.model[response.primal_model_part.Name].ProcessInfo = response.Process_Info
+            #     print("::ProcessInfo::", response.Process_Info)
+            #     print("::Model After::", response.model)
+
+            response.Initialize()
+
             for node in response.primal_model_part.Nodes:
                 node.X = x[node.Id-1]
                 node.Y = y[node.Id-1]
@@ -96,6 +116,7 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
                 #print(node.Id, node.X, node.Y, node.Z)
 
             KSO.MeshControllerUtilities(response.primal_model_part).SetReferenceMeshToMesh()
+            print("::Nodes Transfered::")
             
             response.InitializeSolutionStep()
 

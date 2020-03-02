@@ -1369,12 +1369,12 @@ void ShellThinElement3D3N::CalculateAll(MatrixType& rLeftHandSideMatrix,
 
     AddBodyForces(data, rRightHandSideVector);
 
-    switch (this->Id())
-    {
-        case 1:
-            KRATOS_WATCH(rLeftHandSideMatrix);
-            break;
-    }
+    // switch (this->Id())
+    // {
+    //     case 1:
+    //         KRATOS_WATCH(rLeftHandSideMatrix);
+    //         break;
+    // }
 }
 
 bool ShellThinElement3D3N::TryCalculateOnIntegrationPoints_GeneralizedStrainsOrStresses(const Variable<Matrix>& rVariable,
