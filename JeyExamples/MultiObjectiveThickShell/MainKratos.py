@@ -9,6 +9,7 @@ from KratosMultiphysics.StructuralMechanicsApplication import structural_respons
 from KratosMultiphysics.StructuralMechanicsApplication.structural_mechanics_analysis import StructuralMechanicsAnalysis
 from KratosMultiphysics import Parameters, Logger
 from KratosMultiphysics.analysis_stage import AnalysisStage
+import KratosMultiphysics.kratos_utilities as kratos_utilities
 import time as timer
 import shutil
 import glob, os
@@ -194,3 +195,6 @@ if __name__ == "__main__":
     
     optimizer = optimizer_factory.CreateOptimizer(parameters["optimization_settings"], model)
     optimizer.Optimize()
+
+    # Cleaning
+    kratos_utilities.DeleteDirectoryIfExisting("__pycache__")

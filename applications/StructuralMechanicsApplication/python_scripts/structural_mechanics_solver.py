@@ -232,7 +232,7 @@ class MechanicalSolver(PythonSolver):
         for node in model_part_nodes:
             if node.Id < 6:
                 print(node.Id, node.X, node.Y, node.Z)
-            elif node.Id == 88:
+            elif node.Id == 90:
                 print(node.Id, node.X, node.Y, node.Z)
 
         is_converged = self.get_mechanical_solution_strategy().SolveSolutionStep()
@@ -241,7 +241,7 @@ class MechanicalSolver(PythonSolver):
         for node in model_part_nodes:
             if node.Id < 6:
                 print(node.Id, node.X, node.Y, node.Z)
-            elif node.Id == 88:
+            elif node.Id == 90:
                 print(node.Id, node.X, node.Y, node.Z)
                 print(node.GetSolutionStepValue(KratosMultiphysics.DISPLACEMENT))
                 
