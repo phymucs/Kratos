@@ -15,6 +15,28 @@ import time as timer
 import shutil
 import glob, os
 
+class CustomAnalysis(StructuralMechanicsAnalysis):
+
+    def __init__(self, model, project_parameters):
+        self.x = None
+        self.y = None
+        self.z = None
+        super(CustomAnalysis, self).__init__(model, project_parameters)
+
+    def SetCoordinatesUpdate(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def ModifyInitialGeometry(self):
+        super(CustomAnalysis, self).ModifyInitialGeometry()
+        for node in self.model.GetModelPart("Struct_Load_1").Nodes:
+            node.X = self.x[node.Id-1]
+            node.Y = self.y[node.Id-1]
+            node.Z = self.z[node.Id-1]
+        KSO.MeshControllerUtilities(self.model.GetModelPart("Struct_Load_1")).SetReferenceMeshToMesh()
+        print("::Nodes Transfered from OPTI MODELPART TO PRIMAL MODELPART::")
+
 if __name__ == "__main__":
 
     #Read from Optimized MDPA (plateR)
@@ -41,22 +63,17 @@ if __name__ == "__main__":
         parameters = KM.Parameters(parameter_file.read())
 
     model = KM.Model()
-    simulation2 = StructuralMechanicsAnalysis(model,parameters)
+    simulation2 = CustomAnalysis(model,parameters)
+    simulation2.SetCoordinatesUpdate(x, y, z)
+    
     simulation2.Initialize()
     primal_model_part2 = model.GetModelPart("Struct_Load_1")
-
-    for node in primal_model_part2.Nodes:
-        node.X = x[node.Id-1]
-        node.Y = y[node.Id-1]
-        node.Z = z[node.Id-1]
-    KSO.MeshControllerUtilities(primal_model_part2).SetReferenceMeshToMesh()
-    print("::Nodes Transfered from OPTI MODELPART TO PRIMAL MODELPART::")
 
     time = primal_model_part2.ProcessInfo.GetValue(KM.TIME)
     time = simulation2._GetSolver().AdvanceInTime(time)
     simulation2.InitializeSolutionStep()
 
-    simulation2._GetSolver().Predict()       #ignore and check the domain size, bc load =0
+    simulation2._GetSolver().Predict()       
     simulation2._GetSolver().SolveSolutionStep()
 
     simulation2.FinalizeSolutionStep()
