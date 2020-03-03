@@ -6,7 +6,6 @@ from KratosMultiphysics.ShapeOptimizationApplication import optimizer_factory
 from KratosMultiphysics.ShapeOptimizationApplication.analyzer_base import AnalyzerBaseClass
 import KratosMultiphysics.StructuralMechanicsApplication as StructuralMechanicsApplication
 from KratosMultiphysics.StructuralMechanicsApplication import structural_response
-from KratosMultiphysics.StructuralMechanicsApplication.structural_mechanics_analysis import StructuralMechanicsAnalysis
 from KratosMultiphysics import Parameters, Logger
 from KratosMultiphysics.analysis_stage import AnalysisStage
 import KratosMultiphysics.kratos_utilities as kratos_utilities
@@ -29,6 +28,7 @@ class CustomAnalysis(StructuralMechanicsAnalysis):
         self.z = z
 
     def ModifyInitialGeometry(self):
+        print("::ModifyInitialGeometry CALLED 1::")
         super(CustomAnalysis, self).ModifyInitialGeometry()
         for node in self.model.GetModelPart("Struct_Load_1").Nodes:
             node.X = self.x[node.Id-1]

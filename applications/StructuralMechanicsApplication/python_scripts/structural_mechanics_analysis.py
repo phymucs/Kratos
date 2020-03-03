@@ -48,6 +48,9 @@ class StructuralMechanicsAnalysis(AnalysisStage):
 
         super(StructuralMechanicsAnalysis, self).__init__(model, project_parameters)
 
+        self.model = model
+        self.project_parameters = project_parameters
+
     def Initialize(self):
         """ Initializing the Analysis """
         super(StructuralMechanicsAnalysis, self).Initialize()
