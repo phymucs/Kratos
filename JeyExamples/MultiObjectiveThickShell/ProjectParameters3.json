@@ -14,7 +14,7 @@
         "analysis_type"                   : "linear",
         "model_import_settings"           : {
             "input_type"     : "mdpa",
-            "input_filename" : "plate"
+            "input_filename" : "plateThin3N"
         },
         "material_import_settings"        : {
             "materials_filename" : "StructuralMaterials.json"
@@ -59,7 +59,7 @@
             "help"          : "This process writes postprocessing files for GiD",
             "Parameters"    : {
                 "model_part_name"        : "Structure",
-                "output_name"            : "plate1",
+                "output_name"            : "plateThin3N1",
                 "postprocess_parameters" : {
                     "result_file_configuration" : {
                         "gidpost_flags"               : {
