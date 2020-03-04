@@ -26,10 +26,13 @@ class CustomAnalysis(StructuralMechanicsAnalysis):
         self.x = x
         self.y = y
         self.z = z
+        self.primal_model_part2 = model.GetModelPart("Struct_Load_1")
+        print("::NODES AND MODEL PART RECIEVED::", self.primal_model_part2)
 
     def ModifyInitialGeometry(self):
         print("::ModifyInitialGeometry CALLED 1::")
         super(CustomAnalysis, self).ModifyInitialGeometry()
+        print("::NODES AND MODEL PART RECIEVED::", self.primal_model_part2)
         for node in self.model.GetModelPart("Struct_Load_1").Nodes:
             node.X = self.x[node.Id-1]
             node.Y = self.y[node.Id-1]
@@ -55,7 +58,7 @@ if __name__ == "__main__":
         x.append(node.X)
         y.append(node.Y)
         z.append(node.Z)
-        print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
+        # print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
     
 
     #Read parameter from Original MDPA (plate)
