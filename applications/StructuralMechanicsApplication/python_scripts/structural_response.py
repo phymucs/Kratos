@@ -6,6 +6,7 @@ import KratosMultiphysics
 from KratosMultiphysics import Parameters, Logger
 import KratosMultiphysics.StructuralMechanicsApplication as StructuralMechanicsApplication
 from KratosMultiphysics.StructuralMechanicsApplication.structural_mechanics_analysis import StructuralMechanicsAnalysis
+import KratosMultiphysics.ShapeOptimizationApplication as KSO
 
 import time as timer
 
@@ -66,6 +67,39 @@ class ResponseFunctionBase(object):
         raise NotImplementedError("GetShapeGradient needs to be implemented by the derived class")
 
 # ==============================================================================
+class Custom_StructuralMechanicsAnalysis(StructuralMechanicsAnalysis):
+    
+    def __init__(self, model, ProjectParametersPrimal, optimizationIteration):
+        self.x = None
+        self.y = None
+        self.z = None
+        self._model_part = None
+        self.optimizationIteration = optimizationIteration
+        super(Custom_StructuralMechanicsAnalysis, self).__init__(model, ProjectParametersPrimal)
+
+    def SetCoordinatesUpdate(self, x, y, z, model_part):
+        # x, y, z are coordinates of Opti Model Part
+        self.x = x
+        self.y = y
+        self.z = z
+        self._model_part = model_part
+        print(self._model_part)
+        # print("::SetCoordinatesUpdateNODES AND MODEL PART RECIEVED::", self._model_part, self._model_part.Name)
+
+    def ModifyInitialGeometry(self):
+        # print("::ModifyInitialGeometry CALLED 1::")
+        super(Custom_StructuralMechanicsAnalysis, self).ModifyInitialGeometry()
+
+        # print("::Primal Model Part Name: ", self.model)
+        # print("::NODES AND MODEL PART RECIEVED::", self._model_part)
+        for node in self._model_part.Nodes:
+            node.X = self.x[node.Id-1]
+            node.Y = self.y[node.Id-1]
+            node.Z = self.z[node.Id-1]
+        KSO.MeshControllerUtilities(self._model_part).SetReferenceMeshToMesh()
+        print("::Nodes Transfered from OPTI MODELPART TO PRIMAL MODELPART::")
+
+# ==============================================================================
 class StrainEnergyResponseFunction(ResponseFunctionBase):
     """Linear strain energy response function. It triggers the primal analysis and
     uses the primal analysis results to calculate response value and gradient.
@@ -77,13 +111,15 @@ class StrainEnergyResponseFunction(ResponseFunctionBase):
     response_function_utility: Cpp utilities object doing the actual computation of response value and gradient.
     """
 
-    def __init__(self, identifier, response_settings, model):
+    def __init__(self, identifier, response_settings, model, optimizationIteration):
         self.identifier = identifier
         
         with open(response_settings["primal_settings"].GetString()) as parameters_file:
             ProjectParametersPrimal = Parameters(parameters_file.read())
         
-        self.primal_analysis = StructuralMechanicsAnalysis(model, ProjectParametersPrimal)
+        # self.primal_analysis = StructuralMechanicsAnalysis(model, ProjectParametersPrimal)
+
+        self.primal_analysis = Custom_StructuralMechanicsAnalysis(model, ProjectParametersPrimal, optimizationIteration)
 
         self.primal_model_part = model.GetModelPart(ProjectParametersPrimal["solver_settings"]["model_part_name"].GetString())
 

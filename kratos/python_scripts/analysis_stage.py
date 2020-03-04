@@ -184,7 +184,7 @@ class AnalysisStage(object):
 
     def ModifyInitialGeometry(self):
         """this is the place to eventually modify geometry (for example moving nodes) in the stage """
-        print("::ModifyInitialGeometry CALLED::")
+        # print("::ModifyInitialGeometry CALLED::")
         pass
 
     def ModifyAfterSolverInitialize(self):

@@ -74,7 +74,7 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             #     print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
             # elif node.Id == 88:
             #     print(node.Id, node.X, node.Y, node.Z)
-            # print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
+            print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
        
         time_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.TIME)
         step_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.STEP)
@@ -84,14 +84,14 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
         if optimizationIteration == 1:
             self.response_functions = {}
             for (response_id, response_settings) in self.specified_responses:
-                self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model)  
+                self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model, optimizationIteration)  
         
         else:    
             for identifier, response in self.response_functions.items():
                 response.model.DeleteModelPart(response.primal_model_part.Name)
                 print("::ModelPart Deleted::", response.primal_model_part.Name)
             for (response_id, response_settings) in self.specified_responses:
-                self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model)
+                self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model, optimizationIteration)
 
         
         for identifier, response in self.response_functions.items():        
@@ -101,8 +101,8 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             optimization_model_part.ProcessInfo.SetValue(km.TIME, time_before_analysis-1)
             optimization_model_part.ProcessInfo.SetValue(km.DELTA_TIME, 0)
 
-            if optimizationIteration != 1:
-                response.SetCoordinatesUpdate(x, y, z, response.primal_model_part)
+            # print("::OPTI PART 2::", response.primal_model_part)
+            response.SetCoordinatesUpdate(x, y, z)
 
             response.Initialize()
 
