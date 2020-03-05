@@ -14,7 +14,7 @@
         "analysis_type"                   : "linear",
         "model_import_settings"           : {
             "input_type"     : "mdpa",
-            "input_filename" : "plateThin3N"
+            "input_filename" : "plateR"
         },
         "material_import_settings"        : {
             "materials_filename" : "StructuralMaterials_1.json"
@@ -46,7 +46,7 @@
                 "variable_name"   : "POINT_LOAD",
                 "interval"        : [0.0,"End"],
                 "modulus"         : 250.0,
-                "direction"       : [0.0,0.0,-1]
+                "direction"       : [0.0,0.0,1]
             }
         }],
         "list_other_processes"     : []
@@ -59,7 +59,7 @@
             "help"          : "This process writes postprocessing files for GiD",
             "Parameters"    : {
                 "model_part_name"        : "Struct_Load_1",
-                "output_name"            : "plateThin3NUpdated",
+                "output_name"            : "plateThin3N",
                 "postprocess_parameters" : {
                     "result_file_configuration" : {
                         "gidpost_flags"               : {

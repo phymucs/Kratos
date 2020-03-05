@@ -16,24 +16,8 @@ import glob, os
 
 if __name__ == "__main__":
 
-    # #Read parameter (VERTICAL LOAD [0, 0, -1])
-    # with open("ProjectParameters3.json",'r') as parameter_file:
-    #     parameters = KM.Parameters(parameter_file.read())
-
-    # model = KM.Model()
-    # simulation = StructuralMechanicsAnalysis(model,parameters)
-    # simulation.Run()
-
-    # #Read parameter (HORIZONTAL LOAD [1, 1, 0])
-    # with open("ProjectParameters4.json",'r') as parameter_file:
-    #     parameters = KM.Parameters(parameter_file.read())
-
-    # model = KM.Model()
-    # simulation = StructuralMechanicsAnalysis(model,parameters)
-    # simulation.Run()
-
     #Read parameter (VERTICAL LOAD [0, 0, -1]) Optimized MDPA (plateR)
-    with open("ProjectParameters5.json",'r') as parameter_file:
+    with open("plateModified.json",'r') as parameter_file:
         parameters = KM.Parameters(parameter_file.read())
 
     model = KM.Model()

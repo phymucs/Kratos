@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     # =====================Multi-Objective-Load 1=================================
     # Read parameters (Optimization)
-    with open("optimization_parameters1.json",'r') as parameter_file:
+    with open("optimization_parameters.json",'r') as parameter_file:
         parameters = KM.Parameters(parameter_file.read())
 
     model = KM.Model()

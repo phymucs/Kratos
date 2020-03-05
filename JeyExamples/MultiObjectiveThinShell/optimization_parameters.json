@@ -36,7 +36,7 @@
                     "analyzer"   : "kratos",
                     "response_settings" :{
                         "response_type"          : "strain_energy",
-                        "primal_settings"        : "ProjectParameters3.json",
+                        "primal_settings"        : "PlateOptiResponse1.json",
                         "gradient_mode"          : "semi_analytic",
                         "step_size"              : 1e-6
                     }
@@ -49,7 +49,7 @@
                     "analyzer"   : "kratos",
                     "response_settings" :{
                         "response_type"          : "strain_energy",
-                        "primal_settings"        : "ProjectParameters4.json",
+                        "primal_settings"        : "PlateOptiResponse2.json",
                         "gradient_mode"          : "semi_analytic",
                         "step_size"              : 1e-6
                     }
@@ -69,7 +69,7 @@
         "optimization_algorithm" : {
             "name"               : "steepest_descent",
             "max_iterations"     : 20,
-            "relative_tolerance" : 1e0,
+            "relative_tolerance" : 1e-10,
             "line_search" : {
                 "line_search_type"           : "manual_stepping",
                 "normalize_search_direction" : true,
@@ -78,7 +78,7 @@
         },
         "output" : {
             "design_output_mode" : "WriteDesignSurface",
-            "nodal_results"      : [ "SHAPE_CHANGE" ],
+            "nodal_results"      : [ "SHAPE_CHANGE", "DF1DX" ],
             "output_format" : {
                 "name": "gid"
             }

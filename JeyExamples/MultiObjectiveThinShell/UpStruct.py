@@ -43,7 +43,7 @@ class CustomAnalysis(StructuralMechanicsAnalysis):
 if __name__ == "__main__":
 
     #Read from Optimized MDPA (plateR)
-    with open("ProjectParameters5.json",'r') as parameter_file:
+    with open("plateModified.json",'r') as parameter_file:
         parameters = KM.Parameters(parameter_file.read())
 
     model = KM.Model()
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     
 
     #Read parameter from Original MDPA (plate)
-    with open("ProjectParameters6.json",'r') as parameter_file:
+    with open("PlateOptiResponse2.json",'r') as parameter_file:
         parameters = KM.Parameters(parameter_file.read())
 
     model = KM.Model()
