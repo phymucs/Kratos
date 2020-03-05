@@ -10,8 +10,8 @@
 //  Main authors:    Suneth Warnakulasuriya
 //
 
-#ifndef KRATOS_RANS_EVM_K_EPSILON_VMS_MONOLITHIC_WALL_H
-#define KRATOS_RANS_EVM_K_EPSILON_VMS_MONOLITHIC_WALL_H
+#ifndef KRATOS_INCOMPRESSIBLE_PRESSURE_CONDITION_H
+#define KRATOS_INCOMPRESSIBLE_PRESSURE_CONDITION_H
 
 // System includes
 
@@ -20,7 +20,7 @@
 // Project includes
 
 // Application includes
-#include "custom_conditions/monolithic_wall_condition.h"
+#include "includes/condition.h"
 
 namespace Kratos
 {
@@ -53,16 +53,16 @@ namespace Kratos
  * @tparam TNumNodes  Number of nodes in the condition
  */
 template <unsigned int TDim, unsigned int TNumNodes = TDim>
-class RansEvmKEpsilonVmsMonolithicWall : public MonolithicWallCondition<TDim, TNumNodes>
+class IncompressiblePressureCondition : public Condition
 {
 public:
     ///@name Type Definitions
     ///@{
 
-    /// Pointer definition of RansEvmKEpsilonVmsMonolithicWall
-    KRATOS_CLASS_INTRUSIVE_POINTER_DEFINITION(RansEvmKEpsilonVmsMonolithicWall);
+    /// Pointer definition of IncompressiblePressureCondition
+    KRATOS_CLASS_INTRUSIVE_POINTER_DEFINITION(IncompressiblePressureCondition);
 
-    using BaseType = MonolithicWallCondition<TDim, TNumNodes>;
+    using BaseType = Condition;
     using NodeType = Node<3>;
     using PropertiesType = Properties;
     using GeometryType = Geometry<NodeType>;
@@ -70,6 +70,7 @@ public:
     using VectorType = Vector;
     using MatrixType = Matrix;
     using IndexType = std::size_t;
+    using ShapeFunctionDerivativesArrayType = GeometryType::ShapeFunctionsGradientsType;
 
     ///@}
     ///@name Life Cycle
@@ -79,7 +80,7 @@ public:
     /** Admits an Id as a parameter.
       @param NewId Index for the new condition
       */
-    explicit RansEvmKEpsilonVmsMonolithicWall(IndexType NewId = 0)
+    explicit IncompressiblePressureCondition(IndexType NewId = 0)
         : BaseType(NewId)
     {
     }
@@ -89,7 +90,7 @@ public:
      @param NewId Index of the new condition
      @param ThisNodes An array containing the nodes of the new condition
      */
-    RansEvmKEpsilonVmsMonolithicWall(IndexType NewId, const NodesArrayType& ThisNodes)
+    IncompressiblePressureCondition(IndexType NewId, const NodesArrayType& ThisNodes)
         : BaseType(NewId, ThisNodes)
     {
     }
@@ -99,7 +100,7 @@ public:
      @param NewId Index of the new condition
      @param pGeometry Pointer to a geometry object
      */
-    RansEvmKEpsilonVmsMonolithicWall(IndexType NewId, GeometryType::Pointer pGeometry)
+    IncompressiblePressureCondition(IndexType NewId, GeometryType::Pointer pGeometry)
         : BaseType(NewId, pGeometry)
     {
     }
@@ -110,34 +111,34 @@ public:
      @param pGeometry Pointer to a geometry object
      @param pProperties Pointer to the element's properties
      */
-    RansEvmKEpsilonVmsMonolithicWall(IndexType NewId,
-                                     GeometryType::Pointer pGeometry,
-                                     PropertiesType::Pointer pProperties)
+    IncompressiblePressureCondition(IndexType NewId,
+                                    GeometryType::Pointer pGeometry,
+                                    PropertiesType::Pointer pProperties)
         : BaseType(NewId, pGeometry, pProperties)
     {
     }
 
     /// Copy constructor.
-    RansEvmKEpsilonVmsMonolithicWall(RansEvmKEpsilonVmsMonolithicWall const& rOther)
+    IncompressiblePressureCondition(IncompressiblePressureCondition const& rOther)
         : BaseType(rOther)
     {
     }
 
     /// Destructor.
-    ~RansEvmKEpsilonVmsMonolithicWall() override = default;
+    ~IncompressiblePressureCondition() override = default;
 
     ///@}
     ///@name Operators
     ///@{
 
     /// Assignment operator
-    RansEvmKEpsilonVmsMonolithicWall& operator=(RansEvmKEpsilonVmsMonolithicWall const& rOther);
+    IncompressiblePressureCondition& operator=(IncompressiblePressureCondition const& rOther);
 
     ///@}
     ///@name Operations
     ///@{
 
-    /// Create a new RansEvmKEpsilonVmsMonolithicWall object.
+    /// Create a new IncompressiblePressureCondition object.
     /**
       @param NewId Index of the new condition
       @param ThisNodes An array containing the nodes of the new condition
@@ -163,7 +164,31 @@ public:
 
     int Check(const ProcessInfo& rCurrentProcessInfo) override;
 
+    void EquationIdVector(EquationIdVectorType& rResult,
+                          ProcessInfo& rCurrentProcessInfo) override;
+
+    /// Returns a list of the element's Dofs
+    /**
+     * @param ElementalDofList the list of DOFs
+     * @param rCurrentProcessInfo the current process info instance
+     */
+    void GetDofList(DofsVectorType& ConditionDofList, ProcessInfo& CurrentProcessInfo) override;
+
+    void GetValuesVector(VectorType& rValues, int Step = 0) override;
+
     void Initialize() override;
+
+    GeometryData::IntegrationMethod GetIntegrationMethod() override;
+
+    void CalculateLocalSystem(MatrixType& rLeftHandSideMatrix,
+                              VectorType& rRightHandSideVector,
+                              ProcessInfo& rCurrentProcessInfo) override;
+
+    void CalculateLeftHandSide(MatrixType& rLeftHandSideMatrix,
+                               ProcessInfo& rCurrentProcessInfo) override;
+
+    void CalculateRightHandSide(VectorType& rRightHandSideVector,
+                                ProcessInfo& rCurrentProcessInfo) override;
 
     ///@}
     ///@name Access
@@ -208,25 +233,6 @@ protected:
     ///@name Protected Operations
     ///@{
 
-    /**
-     * @brief Applies rans based wall law
-     *
-     * This method calculate left hand side matrix and right hand side vector for following equation
-     *
-     * \[
-     *      u_\tau = max\left(C_\mu^0.25 \sqrt{k}, \frac{||\underline{u}||}{\frac{1}{\kappa}ln(y^+)+\beta}\right)
-     * \]
-     *
-     * integration point value = \rho \frac{u_\tau^2}{||\underline{u}||}\underline{u}
-     *
-     * @param rLocalMatrix         Left hand side matrix
-     * @param rLocalVector         Right hand side vector
-     * @param rCurrentProcessInfo  Current process info from model part
-     */
-    void ApplyWallLaw(MatrixType& rLocalMatrix,
-                      VectorType& rLocalVector,
-                      ProcessInfo& rCurrentProcessInfo) override;
-
     ///@}
     ///@name Protected  Access
     ///@{
@@ -245,11 +251,11 @@ private:
     ///@name Static Member Variables
     ///@{
 
+    double mNormalLength;
+
     ///@}
     ///@name Member Variables
     ///@{
-
-    double mWallHeight;
 
     ///@}
     ///@name Serialization
@@ -269,6 +275,8 @@ private:
     ///@name Private Operations
     ///@{
 
+    void CalculateNormal();
+
     ///@}
     ///@name Private  Access
     ///@{
@@ -283,7 +291,7 @@ private:
 
     ///@}
 
-}; // Class RansEvmKEpsilonVmsMonolithicWall
+}; // Class IncompressiblePressureCondition
 
 ///@}
 
@@ -297,7 +305,7 @@ private:
 /// input stream function
 template <unsigned int TDim, unsigned int TNumNodes>
 inline std::istream& operator>>(std::istream& rIStream,
-                                RansEvmKEpsilonVmsMonolithicWall<TDim, TNumNodes>& rThis)
+                                IncompressiblePressureCondition<TDim, TNumNodes>& rThis)
 {
     return rIStream;
 }
@@ -305,7 +313,7 @@ inline std::istream& operator>>(std::istream& rIStream,
 /// output stream function
 template <unsigned int TDim, unsigned int TNumNodes>
 inline std::ostream& operator<<(std::ostream& rOStream,
-                                const RansEvmKEpsilonVmsMonolithicWall<TDim, TNumNodes>& rThis)
+                                const IncompressiblePressureCondition<TDim, TNumNodes>& rThis)
 {
     rThis.PrintInfo(rOStream);
     rOStream << std::endl;
@@ -320,4 +328,4 @@ inline std::ostream& operator<<(std::ostream& rOStream,
 
 } // namespace Kratos.
 
-#endif // KRATOS_RANS_EVM_K_EPSILON_VMS_MONOLITHIC_WALL_H
+#endif // KRATOS_INCOMPRESSIBLE_PRESSURE_CONDITION_H

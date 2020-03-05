@@ -10,8 +10,8 @@
 //  Main authors:    Suneth Warnakulasuriya (https://github.com/sunethwarna)
 //
 
-#if !defined(KRATOS_RANS_NUT_Y_PLUS_WALL_FUNCTION_PROCESS_H_INCLUDED)
-#define KRATOS_RANS_NUT_Y_PLUS_WALL_FUNCTION_PROCESS_H_INCLUDED
+#if !defined(KRATOS_RANS_K_EPSILON_DOMAIN_INITIALIZATION_PROCESS_H_INCLUDED)
+#define KRATOS_RANS_K_EPSILON_DOMAIN_INITIALIZATION_PROCESS_H_INCLUDED
 
 // System includes
 #include <string>
@@ -46,29 +46,46 @@ namespace Kratos
 ///@name Kratos Classes
 ///@{
 
-class KRATOS_API(RANS_APPLICATION) RansNutYPlusWallFunctionProcess : public Process
+/**
+ * @brief Set turbulent kinetic energy value based on the given turbulent intensity
+ *
+ * This process sets turbulent kinetic energy of a given model part based on the
+ * following equation
+ *
+ * \[
+ *
+ *     k = \frac{3}{2}\left(I||\underline{u}||\right)^2
+ *
+ * \]
+ *
+ * $k$ is the turbulent kinetic energy, $||\underline{u}||$ is the velocity magnitude,
+ * $I$ is the turbulent intensity. If the velocity magnitude is zero, then $k_{min}$ is
+ * assigned as the turbulent kinetic energy.
+ *
+ */
+
+class KRATOS_API(RANS_APPLICATION) RansKEpsilonDomainInitializationProcess : public Process
 {
 public:
     ///@name Type Definitions
     ///@{
 
     using NodeType = ModelPart::NodeType;
-    using ConditionType = ModelPart::ConditionType;
-    using ConditionGeometryType = ModelPart::ConditionType::GeometryType;
 
-    /// Pointer definition of RansNutYPlusWallFunctionProcess
-    KRATOS_CLASS_POINTER_DEFINITION(RansNutYPlusWallFunctionProcess);
+    using NodesContainerType = ModelPart::NodesContainerType;
+
+    /// Pointer definition of RansKEpsilonDomainInitializationProcess
+    KRATOS_CLASS_POINTER_DEFINITION(RansKEpsilonDomainInitializationProcess);
 
     ///@}
     ///@name Life Cycle
     ///@{
 
     /// Constructor
-
-    RansNutYPlusWallFunctionProcess(Model& rModel, Parameters rParameters);
+    RansKEpsilonDomainInitializationProcess(Model& rModel, Parameters rParameters);
 
     /// Destructor.
-    ~RansNutYPlusWallFunctionProcess() override = default;
+    ~RansKEpsilonDomainInitializationProcess() override = default;
 
     ///@}
     ///@name Operators
@@ -78,11 +95,11 @@ public:
     ///@name Operations
     ///@{
 
-    int Check() override;
-
     void ExecuteInitialize() override;
 
     void Execute() override;
+
+    int Check() override;
 
     ///@}
     ///@name Access
@@ -153,14 +170,18 @@ private:
     Parameters mrParameters;
     std::string mModelPartName;
 
-    int mEchoLevel;
-
-    double mLimitYPlus;
-    double mMinValue;
-
+    double mTurbulentIntensity;
+    double mTurbulentMixingLength;
+    double mDensity;
+    double mKinematicViscosity;
+    double mMinTurbulentKineticEnergy;
+    double mMinTurbulentEnergyDissipationRate;
+    double mMinTurbulentViscosity;
     double mCmu;
-    double mVonKarman;
-    double mBeta;
+
+    bool mInitialized = false;
+
+    int mEchoLevel;
 
     ///@}
     ///@name Private Operators
@@ -169,8 +190,6 @@ private:
     ///@}
     ///@name Private Operations
     ///@{
-
-    void CalculateConditionNeighbourCount();
 
     ///@}
     ///@name Private  Access
@@ -185,14 +204,14 @@ private:
     ///@{
 
     /// Assignment operator.
-    RansNutYPlusWallFunctionProcess& operator=(RansNutYPlusWallFunctionProcess const& rOther);
+    RansKEpsilonDomainInitializationProcess& operator=(RansKEpsilonDomainInitializationProcess const& rOther);
 
     /// Copy constructor.
-    RansNutYPlusWallFunctionProcess(RansNutYPlusWallFunctionProcess const& rOther);
+    RansKEpsilonDomainInitializationProcess(RansKEpsilonDomainInitializationProcess const& rOther);
 
     ///@}
 
-}; // Class RansNutYPlusWallFunctionProcess
+}; // Class RansKEpsilonDomainInitializationProcess
 
 ///@}
 
@@ -205,7 +224,7 @@ private:
 
 /// output stream function
 inline std::ostream& operator<<(std::ostream& rOStream,
-                                const RansNutYPlusWallFunctionProcess& rThis);
+                                const RansKEpsilonDomainInitializationProcess& rThis);
 
 ///@}
 
@@ -213,4 +232,4 @@ inline std::ostream& operator<<(std::ostream& rOStream,
 
 } // namespace Kratos.
 
-#endif // KRATOS_RANS_NUT_Y_PLUS_WALL_FUNCTION_PROCESS_H_INCLUDED defined
+#endif // KRATOS_RANS_K_EPSILON_DOMAIN_INITIALIZATION_PROCESS_H_INCLUDED defined

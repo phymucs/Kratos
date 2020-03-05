@@ -11,8 +11,8 @@
 //
 
 // System includes
-#include <limits>
 #include <cmath>
+#include <limits>
 
 // External includes
 
@@ -22,10 +22,12 @@
 #include "includes/define.h"
 
 // Application includes
-#include "rans_evm_k_epsilon_epsilon_wall.h"
-
+#include "custom_elements/stabilized_convection_diffusion_reaction_utilities.h"
 #include "custom_utilities/rans_calculation_utilities.h"
 #include "rans_application_variables.h"
+
+// Include base h
+#include "rans_evm_k_epsilon_epsilon_wall.h"
 
 namespace Kratos
 {
@@ -123,7 +125,7 @@ void RansEvmKEpsilonEpsilonWall<TDim, TNumNodes>::CalculateLocalVelocityContribu
     rRightHandSideVector.clear();
     rDampingMatrix.clear();
 
-    if (this->Is(SLIP))
+    if (RansCalculationUtilities::IsWall(*this))
     {
         this->AddLocalVelocityContribution(rDampingMatrix, rRightHandSideVector,
                                            rCurrentProcessInfo);
@@ -149,7 +151,6 @@ int RansEvmKEpsilonEpsilonWall<TDim, TNumNodes>::Check(const ProcessInfo& rCurre
         KRATOS_CHECK_VARIABLE_IN_NODAL_DATA(TURBULENT_VISCOSITY, r_node);
         KRATOS_CHECK_VARIABLE_IN_NODAL_DATA(TURBULENT_KINETIC_ENERGY, r_node);
         KRATOS_CHECK_VARIABLE_IN_NODAL_DATA(TURBULENT_ENERGY_DISSIPATION_RATE, r_node);
-        KRATOS_CHECK_VARIABLE_IN_NODAL_DATA(RANS_Y_PLUS, r_node);
 
         KRATOS_CHECK_DOF_IN_NODE(TURBULENT_ENERGY_DISSIPATION_RATE, r_node);
     }
@@ -246,7 +247,6 @@ void RansEvmKEpsilonEpsilonWall<TDim, TNumNodes>::AddLocalVelocityContribution(
     KRATOS_TRY
 
     const GeometryType& r_geometry = this->GetGeometry();
-
     // Get Shape function data
     const GeometryType::IntegrationPointsArrayType& integration_points =
         r_geometry.IntegrationPoints(GeometryData::GI_GAUSS_2);
@@ -254,7 +254,6 @@ void RansEvmKEpsilonEpsilonWall<TDim, TNumNodes>::AddLocalVelocityContribution(
     MatrixType shape_functions = r_geometry.ShapeFunctionsValues(GeometryData::GI_GAUSS_2);
 
     const double area = r_geometry.DomainSize();
-
     // CAUTION: "Jacobian" is 2.0*A for triangles but 0.5*A for lines
     double J = (TNumNodes == 2) ? 0.5 * area : 2.0 * area;
 
@@ -262,6 +261,10 @@ void RansEvmKEpsilonEpsilonWall<TDim, TNumNodes>::AddLocalVelocityContribution(
         rCurrentProcessInfo[TURBULENT_ENERGY_DISSIPATION_RATE_SIGMA];
     const double c_mu_25 = std::pow(rCurrentProcessInfo[TURBULENCE_RANS_C_MU], 0.25);
     const double eps = std::numeric_limits<double>::epsilon();
+
+    const ConditionType& r_parent_condition = *this->GetValue(PARENT_CONDITION_POINTER);
+    const double y_plus = r_parent_condition.GetValue(RANS_Y_PLUS);
+
     for (IndexType g = 0; g < num_gauss_points; ++g)
     {
         const Vector& gauss_shape_functions = row(shape_functions, g);
@@ -271,13 +274,10 @@ void RansEvmKEpsilonEpsilonWall<TDim, TNumNodes>::AddLocalVelocityContribution(
             r_geometry, KINEMATIC_VISCOSITY, gauss_shape_functions);
         const double nu_t = RansCalculationUtilities::EvaluateInPoint(
             r_geometry, TURBULENT_VISCOSITY, gauss_shape_functions);
-        const double tke = RansCalculationUtilities::EvaluateInPoint(
-            r_geometry, TURBULENT_KINETIC_ENERGY, gauss_shape_functions);
         const double epsilon = RansCalculationUtilities::EvaluateInPoint(
             r_geometry, TURBULENT_ENERGY_DISSIPATION_RATE, gauss_shape_functions);
-        const double y_plus = RansCalculationUtilities::EvaluateInPoint(
-            r_geometry, RANS_Y_PLUS, gauss_shape_functions);
-
+        const double tke = RansCalculationUtilities::EvaluateInPoint(
+            r_geometry, TURBULENT_KINETIC_ENERGY, gauss_shape_functions);
         const double u_tau = c_mu_25 * std::sqrt(std::max(tke, 0.0));
 
         if (y_plus > eps)

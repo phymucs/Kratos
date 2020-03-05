@@ -34,11 +34,21 @@ void AddCustomUtilitiesToPython(pybind11::module& m)
         .def("GetMinimumScalarValue", &RansVariableUtilities::GetMinimumScalarValue)
         .def("GetMaximumScalarValue", &RansVariableUtilities::GetMaximumScalarValue)
         .def("CopyNodalSolutionStepVariablesList",
-             &RansVariableUtilities::CopyNodalSolutionStepVariablesList);
+             &RansVariableUtilities::CopyNodalSolutionStepVariablesList)
+        .def("InitializeDuplicatedModelPart", &RansVariableUtilities::InitializeDuplicatedModelPart)
+        .def("CalculateMagnitudeSquareFor3DVariable", &RansVariableUtilities::CalculateMagnitudeSquareFor3DVariable)
+        .def("FixFlaggedDofs", &RansVariableUtilities::FixFlaggedDofs, py::arg("model_part"), py::arg("variable"), py::arg("check_flag"), py::arg("check_value") = true)
+        .def("CopyFlaggedVariableToNonHistorical", &RansVariableUtilities::CopyFlaggedVariableToNonHistorical<double>, py::arg("model_part"), py::arg("variable"), py::arg("check_flag"), py::arg("check_value") = true)
+        .def("CopyFlaggedVariableToNonHistorical", &RansVariableUtilities::CopyFlaggedVariableToNonHistorical<array_1d<double, 3>>, py::arg("model_part"), py::arg("variable"), py::arg("check_flag"), py::arg("check_value") = true)
+        .def("CopyFlaggedVariableFromNonHistorical", &RansVariableUtilities::CopyFlaggedVariableFromNonHistorical<double>, py::arg("model_part"), py::arg("variable"), py::arg("check_flag"), py::arg("check_value") = true)
+        .def("CopyFlaggedVariableFromNonHistorical", &RansVariableUtilities::CopyFlaggedVariableFromNonHistorical<array_1d<double, 3>>, py::arg("model_part"), py::arg("variable"), py::arg("check_flag"), py::arg("check_value") = true)
+        ;
 
     m.def_submodule("RansCalculationUtilities")
         .def("CalculateLogarithmicYPlusLimit",
-             &RansCalculationUtilities::CalculateLogarithmicYPlusLimit);
+             &RansCalculationUtilities::CalculateLogarithmicYPlusLimit,
+             py::arg("kappa") = 0.41, py::arg("beta") = 5.2,
+             py::arg("max_iterations") = 20, py::arg("tolerance") = 1e-6);
 }
 
 } // namespace Python.
