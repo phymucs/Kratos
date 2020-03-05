@@ -32,16 +32,10 @@ import glob, os
 class KratosInternalAnalyzer( AnalyzerBaseClass ):
     # --------------------------------------------------------------------------
     def __init__( self, specified_responses, model_part_controller ):
-        # self.response_functions = {}
         self.model_part_controller = model_part_controller
         self.specified_responses = specified_responses
         self.model = model_part_controller.GetModel()
-        #print("::Response Object Creation Skipped::")
-        
-        # for (response_id, response_settings) in specified_responses:
-        #     #print("CALLED:::", response_id, response_settings)           
-            
-        #     self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, model)    
+  
     #---------------------------------------------------------------------------
     def DirForOptimization(self, OptiFile, itr , FolderName):
         shutil.copy(OptiFile, str(itr)+ "_ITR" + ".post.bin")            
@@ -74,7 +68,7 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             #     print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
             # elif node.Id == 88:
             #     print(node.Id, node.X, node.Y, node.Z)
-            print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
+            # print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
        
         time_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.TIME)
         step_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.STEP)
@@ -88,7 +82,7 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
         
         else:    
             for identifier, response in self.response_functions.items():
-                response.model.DeleteModelPart(response.primal_model_part.Name)
+                response.model.DeleteModelPart(response.primal_model_part.Name) # Other than Opti ITR 1, delete ModelPart
                 print("::ModelPart Deleted::", response.primal_model_part.Name)
             for (response_id, response_settings) in self.specified_responses:
                 self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model, optimizationIteration)
@@ -101,18 +95,9 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             optimization_model_part.ProcessInfo.SetValue(km.TIME, time_before_analysis-1)
             optimization_model_part.ProcessInfo.SetValue(km.DELTA_TIME, 0)
 
-            # print("::OPTI PART 2::", response.primal_model_part)
-            response.SetCoordinatesUpdate(x, y, z)
+            response.SetCoordinatesUpdate(x, y, z)  #Transfer the Opti ITR Node Coordinates
 
             response.Initialize()
-
-            # for node in response.primal_model_part.Nodes:
-            #     node.X = x[node.Id-1]
-            #     node.Y = y[node.Id-1]
-            #     node.Z = z[node.Id-1]
-
-            # KSO.MeshControllerUtilities(response.primal_model_part).SetReferenceMeshToMesh()
-            # print("::Nodes Transfered from OPTI MODELPART TO PRIMAL MODELPART::")
             
             response.InitializeSolutionStep()
 
@@ -125,6 +110,12 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             if communicator.isRequestingGradientOf(identifier):
                 response.CalculateGradient()
                 communicator.reportGradient(identifier, response.GetShapeGradient())
+            
+            print("\n::Gradient Info::", identifier)
+            self.gradient = response.GetShapeGradient()
+            for node in response.primal_model_part.Nodes:  
+                if node.Id < 6 or node.Id == 90:
+                    print(node.Id, self.gradient[node.Id])
             
             response.FinalizeSolutionStep()
 
