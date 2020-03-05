@@ -5,7 +5,7 @@
             "model_part_name"          : "Structure",
             "model_import_settings"    : {
                 "input_type"       : "mdpa",
-                "input_filename"   : "plate"
+                "input_filename"   : "plateThin3N"
             },
             "design_surface_sub_model_part_name" : "GENERIC_DesignSurface",
             "damping" : {
@@ -36,20 +36,7 @@
                     "analyzer"   : "kratos",
                     "response_settings" :{
                         "response_type"          : "strain_energy",
-                        "primal_settings"        : "PlateOptiResponse1.json",
-                        "gradient_mode"          : "semi_analytic",
-                        "step_size"              : 1e-6
-                    }
-                },
-                {
-                    "identifier" : "strain_energy_2",
-                    "type"       : "minimization",
-                    "scaling_factor"    :   1e0,
-                    "weight"    :   1.0,
-                    "analyzer"   : "kratos",
-                    "response_settings" :{
-                        "response_type"          : "strain_energy",
-                        "primal_settings"        : "PlateOptiResponse2.json",
+                        "primal_settings"        : "PlateOptiThin.json",
                         "gradient_mode"          : "semi_analytic",
                         "step_size"              : 1e-6
                     }

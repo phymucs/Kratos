@@ -5,7 +5,7 @@
             "model_part_name"          : "Structure",
             "model_import_settings"    : {
                 "input_type"       : "mdpa",
-                "input_filename"   : "ShellLoad"
+                "input_filename"   : "plateThick4N"
             },
             "design_surface_sub_model_part_name" : "GENERIC_DesignSurface",
             "damping" : {
@@ -36,20 +36,7 @@
                     "analyzer"   : "kratos",
                     "response_settings" :{
                         "response_type"          : "strain_energy",
-                        "primal_settings"        : "ProjectParameters1.json",
-                        "gradient_mode"          : "semi_analytic",
-                        "step_size"              : 1e-6
-                    }
-                },
-                {
-                    "identifier" : "strain_energy_2",
-                    "type"       : "minimization",
-                    "scaling_factor"    :   1e0,
-                    "weight"    :   0.5,
-                    "analyzer"   : "kratos",
-                    "response_settings" :{
-                        "response_type"          : "strain_energy",
-                        "primal_settings"        : "ProjectParameters2.json",
+                        "primal_settings"        : "PlateOptiThick.json",
                         "gradient_mode"          : "semi_analytic",
                         "step_size"              : 1e-6
                     }
@@ -62,14 +49,14 @@
             "type"  : "vertex_morphing",
             "filter" : {
                 "filter_function_type"       : "linear",
-                "filter_radius"              : 3.0,
+                "filter_radius"              : 6.0,
                 "max_nodes_in_filter_radius" : 10000
             }
         },
         "optimization_algorithm" : {
             "name"               : "steepest_descent",
             "max_iterations"     : 20,
-            "relative_tolerance" : 1e0,
+            "relative_tolerance" : 1e-10,
             "line_search" : {
                 "line_search_type"           : "manual_stepping",
                 "normalize_search_direction" : true,
@@ -78,7 +65,7 @@
         },
         "output" : {
             "design_output_mode" : "WriteDesignSurface",
-            "nodal_results"      : [ "SHAPE_CHANGE" ],
+            "nodal_results"      : [ "SHAPE_CHANGE", "DF1DX" ],
             "output_format" : {
                 "name": "gid"
             }

@@ -45,7 +45,7 @@
                     "identifier" : "strain_energy_2",
                     "type"       : "minimization",
                     "scaling_factor"    :   1e0,
-                    "weight"    :   0.5,
+                    "weight"    :   1.0,
                     "analyzer"   : "kratos",
                     "response_settings" :{
                         "response_type"          : "strain_energy",
