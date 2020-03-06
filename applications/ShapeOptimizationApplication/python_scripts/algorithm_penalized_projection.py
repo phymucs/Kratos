@@ -86,6 +86,7 @@ class AlgorithmPenalizedProjection(OptimizationAlgorithm):
         self.mapper.Initialize()
 
         self.data_logger = data_logger_factory.CreateDataLogger(self.model_part_controller, self.communicator, self.optimization_settings)
+        print("::JEY out")
         self.data_logger.InitializeDataLogging()
 
         self.optimization_utilities = KSO.OptimizationUtilities(self.design_surface, self.optimization_settings)

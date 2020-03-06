@@ -111,11 +111,11 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
                 response.CalculateGradient()
                 communicator.reportGradient(identifier, response.GetShapeGradient())
             
-            print("\n::Gradient Info::", identifier)
-            self.gradient = response.GetShapeGradient()
-            for node in response.primal_model_part.Nodes:  
-                if node.Id < 6 or node.Id == 90:
-                    print(node.Id, self.gradient[node.Id])
+            # print("\n::Gradient Info::", identifier)
+            # self.gradient = response.GetShapeGradient()
+            # for node in response.primal_model_part.Nodes:  
+            #     if node.Id < 6 or node.Id == 90:
+            #         print(node.Id, self.gradient[node.Id])
             
             response.FinalizeSolutionStep()
 

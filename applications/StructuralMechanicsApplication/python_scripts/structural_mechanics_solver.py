@@ -228,20 +228,20 @@ class MechanicalSolver(PythonSolver):
     def SolveSolutionStep(self):
         model_part_nodes = self.main_model_part.Nodes
 
-        print("\n::BEFORE SSS::")
-        for node in model_part_nodes:
-            if node.Id < 6 or node.Id == 90:
-                print(node.Id, node.X, node.Y, node.Z)
+        # print("\n::BEFORE SSS::")
+        # for node in model_part_nodes:
+        #     if node.Id < 6 or node.Id == 90:
+        #         print(node.Id, node.X, node.Y, node.Z)
 
         is_converged = self.get_mechanical_solution_strategy().SolveSolutionStep()
         
-        print("::AFTER SSS::")
-        for node in model_part_nodes:
-            if node.Id < 6:
-                print(node.Id, node.X, node.Y, node.Z)
-            elif node.Id == 90:
-                print(node.Id, node.X, node.Y, node.Z)
-                print(node.GetSolutionStepValue(KratosMultiphysics.DISPLACEMENT))
+        # print("::AFTER SSS::")
+        # for node in model_part_nodes:
+        #     if node.Id < 6:
+        #         print(node.Id, node.X, node.Y, node.Z)
+        #     elif node.Id == 90:
+        #         print(node.Id, node.X, node.Y, node.Z)
+        #         print(node.GetSolutionStepValue(KratosMultiphysics.DISPLACEMENT))
                 
         if not is_converged:
             msg  = "Solver did not converge for step " + str(self.main_model_part.ProcessInfo[KratosMultiphysics.STEP]) + "\n"
@@ -251,7 +251,6 @@ class MechanicalSolver(PythonSolver):
 
     def FinalizeSolutionStep(self):
         self.get_mechanical_solution_strategy().FinalizeSolutionStep()
-        #mechanical_solution_strategy.FinalizeSolutionStep()
 
     def AdvanceInTime(self, current_time):
         dt = self.ComputeDeltaTime()

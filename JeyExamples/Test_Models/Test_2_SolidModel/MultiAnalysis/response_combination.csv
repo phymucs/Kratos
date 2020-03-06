@@ -1,0 +1,6 @@
+---------------------------------
+f0: compromise_function
+f1: mass
+f2: mass
+---------------------------------
+ itr,     f0_value,     f1_value,     f2_value, ||df0dx_st||, ||df1dx_st||, ||df2dx_st||
