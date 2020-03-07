@@ -74,19 +74,27 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
         step_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.STEP)
         delta_time_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.DELTA_TIME)
 
-        
+        response_type = []
+
         if optimizationIteration == 1:
             self.response_functions = {}
             for (response_id, response_settings) in self.specified_responses:
+                response_type.append(response_settings["response_type"].GetString())
                 self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model, optimizationIteration)  
         
         else:    
             for identifier, response in self.response_functions.items():
-                response.model.DeleteModelPart(response.primal_model_part.Name) # Other than Opti ITR 1, delete ModelPart
-                print("::ModelPart Deleted::", response.primal_model_part.Name)
+                if identifier == "mass":
+                    response.model.DeleteModelPart(response.model_part.Name)
+                    print("::ModelPart Deleted::", response.model_part.Name)
+                else:
+                    response.model.DeleteModelPart(response.primal_model_part.Name) # Other than Opti ITR 1, delete ModelPart
+                    print("::ModelPart Deleted::", response.primal_model_part.Name)
             for (response_id, response_settings) in self.specified_responses:
+                response_type.append(response_settings["response_type"].GetString())
                 self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model, optimizationIteration)
 
+        i = 0
         
         for identifier, response in self.response_functions.items():        
 
@@ -95,7 +103,10 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             optimization_model_part.ProcessInfo.SetValue(km.TIME, time_before_analysis-1)
             optimization_model_part.ProcessInfo.SetValue(km.DELTA_TIME, 0)
 
-            response.SetCoordinatesUpdate(x, y, z)  #Transfer the Opti ITR Node Coordinates
+
+            if response_type[i] != "mass":
+                response.SetCoordinatesUpdate(x, y, z)  #Transfer the Opti ITR Node Coordinates
+            i=+1
 
             response.Initialize()
             
@@ -124,13 +135,13 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             optimization_model_part.ProcessInfo.SetValue(km.TIME, time_before_analysis)
             optimization_model_part.ProcessInfo.SetValue(km.DELTA_TIME, delta_time_before_analysis)
 
-            self.model_part_controller.SetMeshToReferenceMesh()
+            # self.model_part_controller.SetMeshToReferenceMesh()
 
-            self.model_part_controller.SetDeformationVariablesToZero()
+            # self.model_part_controller.SetDeformationVariablesToZero()
 
-            KSO.MeshControllerUtilities(response.primal_model_part).SetMeshToReferenceMesh()
+            # KSO.MeshControllerUtilities(response.primal_model_part).SetMeshToReferenceMesh()
             
-            KSO.MeshControllerUtilities(response.primal_model_part).SetDeformationVariablesToZero()        
+            # KSO.MeshControllerUtilities(response.primal_model_part).SetDeformationVariablesToZero()        
 
     # --------------------------------------------------------------------------
     def FinalizeAfterOptimizationLoop( self ):

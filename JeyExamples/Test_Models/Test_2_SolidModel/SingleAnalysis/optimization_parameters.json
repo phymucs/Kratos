@@ -72,10 +72,11 @@
                     "input_filename" : "3D_Hook"
                 },
                 "material_import_settings" :{
-                    "materials_filename": "materials_3D.json"
+                    "materials_filename": "materials_1.json"
                 },
                 "gradient_mode"          : "finite_differencing",
-                "step_size"              : 1e-8
+                "step_size"              : 1e-8,
+                "domain_size"           :   3
             },
             "project_gradient_on_surface_normals" : true
         }],
@@ -106,7 +107,7 @@
             "correction_scaling"      : 0.1,
             "use_adaptive_correction" : true,
             "max_iterations"          : 50,
-            "relative_tolerance"      : 1e-0,
+            "relative_tolerance"      : 1e-10,
             "line_search" : {
                 "line_search_type"           : "manual_stepping",
                 "normalize_search_direction" : true,

@@ -61,48 +61,23 @@
             }
         },
         "objectives" : [{
-            "identifier"    :   "compromise_function",
-            "type"  :   "minimization",
-            "is_combined"   :   true,
-            "combined_responses"    :   [
-                {
-                    "identifier" : "mass",
-                    "type"       : "minimization",
-                    "weight"    :   1.0,
-                    "analyzer" : "kratos",
-                    "response_settings":{
-                        "response_type"         : "mass",
-                        "model_part_name"       : "HookPrime_1",
-                        "model_import_settings" : {
-                            "input_type"     : "mdpa",
-                            "input_filename" : "3D_Hook"
-                        },
-                        "material_import_settings" :{
-                            "materials_filename": "materials_1.json"
-                        },
-                        "gradient_mode"          : "finite_differencing",
-                        "step_size"              : 1e-8
-                    }
+            "identifier" : "mass",
+            "type"       : "minimization",
+            "analyzer" : "kratos",
+            "response_settings":{
+                "response_type"         : "mass",
+                "model_part_name"       : "HookPrime",
+                "model_import_settings" : {
+                    "input_type"     : "mdpa",
+                    "input_filename" : "3D_Hook"
                 },
-                {
-                    "identifier" : "mass",
-                    "type"       : "minimization",
-                    "analyzer" : "kratos",
-                    "response_settings":{
-                        "response_type"         : "mass",
-                        "model_part_name"       : "HookPrime_2",
-                        "model_import_settings" : {
-                            "input_type"     : "mdpa",
-                            "input_filename" : "3D_Hook"
-                        },
-                        "material_import_settings" :{
-                            "materials_filename": "materials_2.json"
-                        },
-                        "gradient_mode"          : "finite_differencing",
-                        "step_size"              : 1e-8
-                    }
-                }
-            ],
+                "material_import_settings" :{
+                    "materials_filename": "materials.json"
+                },
+                "gradient_mode"          : "finite_differencing",
+                "step_size"              : 1e-8,
+                "domain_size"           :   3
+            },
             "project_gradient_on_surface_normals" : true
         }],
         "constraints" : [{
@@ -152,7 +127,7 @@
                                      "SHAPE_CHANGE",
                                      "MESH_CHANGE" ],
             "output_format" : {
-                "name": "gid"
+                "name": "vtk"
             }
         }
     }

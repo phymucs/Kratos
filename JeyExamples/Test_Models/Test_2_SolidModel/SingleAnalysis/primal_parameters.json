@@ -20,7 +20,7 @@
             "input_filename" : "3D_Hook"
         },
             "material_import_settings" :{
-            "materials_filename": "materials_3D.json"
+            "materials_filename": "materials_2.json"
         },
         "line_search"                        : false,
         "convergence_criterion"              : "Residual_criterion",
@@ -64,7 +64,7 @@
                 "mesh_id"         : 0,
                 "model_part_name" : "HookPrime.SurfacePressure3D_load",
                 "variable_name"   : "NEGATIVE_FACE_PRESSURE",
-                "value"           : 1000
+                "value"           : 900
             }
         }]
     },
