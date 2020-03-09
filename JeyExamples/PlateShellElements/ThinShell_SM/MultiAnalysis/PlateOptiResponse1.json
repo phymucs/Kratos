@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 0.0
+        "end_time"      : 1.0
     },
     "solver_settings"  : {
         "solver_type"                     : "Static",
@@ -23,8 +23,7 @@
             "time_step" : 1.1
         },
         "line_search"                     : false,
-        "rotation_dofs"                   : true,
-        "clear_storage": false
+        "rotation_dofs"                   : true
     },
     "processes"        : {
         "constraints_process_list" : [{
@@ -46,19 +45,8 @@
                 "model_part_name" : "Struct_Load_1.PointLoad3D_Load",
                 "variable_name"   : "POINT_LOAD",
                 "interval"        : [0.0,"End"],
-                "modulus"         : 250.0,
-                "direction"       : [0,0,-1]
-            }
-        },{
-            "python_module" : "assign_vector_by_direction_to_condition_process",
-            "kratos_module" : "KratosMultiphysics",
-            "check"         : "DirectorVectorNonZero direction",
-            "Parameters"    : {
-                "model_part_name" : "Struct_Load_1.PointLoad3D_Load",
-                "variable_name"   : "POINT_LOAD",
-                "interval"        : [0.0,"End"],
-                "modulus"         : 250.0,
-                "direction"       : [0,0,1]
+                "modulus"         : 500.0,
+                "direction"       : [0.0,0.0,-1]
             }
         }],
         "list_other_processes"     : []
@@ -71,7 +59,7 @@
             "help"          : "This process writes postprocessing files for GiD",
             "Parameters"    : {
                 "model_part_name"        : "Struct_Load_1",
-                "output_name"            : "plateThin3N",
+                "output_name"            : "plateThin3N1",
                 "postprocess_parameters" : {
                     "result_file_configuration" : {
                         "gidpost_flags"               : {

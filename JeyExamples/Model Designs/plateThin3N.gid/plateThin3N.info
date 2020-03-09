@@ -1,0 +1,101 @@
+ |  /           |
+ ' /   __| _` | __|  _ \   __|
+ . \  |   (   | |   (   |\__ \
+_|\_\_|  \__,_|\__|\___/ ____/
+           Multi-Physics 7.0.0-0c0a3db-Release
+Compiled with OpenMP support.
+Maximum OpenMP threads: 1.
+Importing    KratosStructuralMechanicsApplication 
+    KRATOS   ___|  |                   |                   |
+           \___ \  __|  __| |   |  __| __| |   |  __| _` | |
+                 | |   |    |   | (    |   |   | |   (   | |
+           _____/ \__|_|   \__,_|\___|\__|\__,_|_|  \__,_|_| MECHANICS
+Initializing KratosStructuralMechanicsApplication...
+::[MechanicalSolver]:: : Construction finished 
+::[StaticMechanicalSolver]:: : Construction finished 
+::[MechanicalSolver]:: : Variables ADDED 
+::[PythonSolver]::: Reading model part. 
+::[PythonSolver]::: Reading model part from file: /home/mjeyaramanank/Desktop/CodeWorld/KRATOS/JeyExamples/lenova_data/plateThin3N.gid/plateThin3N.mdpa 
+ModelPartIO:   [Reading Nodes    : 121 nodes read]
+ModelPartIO:   [Reading Elements : 200 elements read] [Type: ShellThinElementCorotational3D3N]
+ModelPartIO:   [Reading Conditions : 1 conditions read] [Type: PointLoadCondition3D1N]
+ModelPartIO:   [Reading Conditions : 200 conditions read] [Type: SurfaceCondition3D3N]
+ModelPartIO:   [Total Lines Read : 1239]
+::[PythonSolver]::: Finished reading model part from mdpa file. 
+ModelPart: -Structure- model part
+    Buffer Size : 1
+    Number of tables : 0
+    Number of sub model parts : 4
+    Current solution step index : 0
+    DOMAIN_SIZE : 3
+    IS_RESTARTED : 0
+
+    Mesh 0 :
+        Number of Nodes       : 121
+        Number of Properties  : 1
+        Number of Elements    : 200
+        Number of Conditions  : 201
+        Number of Constraints : 0
+
+    -DISPLACEMENT_Constraint- model part
+        Number of tables : 0
+        Number of sub model parts : 0
+
+        Mesh 0 :
+            Number of Nodes       : 21
+            Number of Properties  : 0
+            Number of Elements    : 0
+            Number of Conditions  : 0
+            Number of Constraints : 0
+    -GENERIC_DesignSurface- model part
+        Number of tables : 0
+        Number of sub model parts : 0
+
+        Mesh 0 :
+            Number of Nodes       : 121
+            Number of Properties  : 0
+            Number of Elements    : 0
+            Number of Conditions  : 200
+            Number of Constraints : 0
+    -Parts_Plate- model part
+        Number of tables : 0
+        Number of sub model parts : 0
+
+        Mesh 0 :
+            Number of Nodes       : 121
+            Number of Properties  : 0
+            Number of Elements    : 200
+            Number of Conditions  : 0
+            Number of Constraints : 0
+    -PointLoad3D_Load- model part
+        Number of tables : 0
+        Number of sub model parts : 0
+
+        Mesh 0 :
+            Number of Nodes       : 1
+            Number of Properties  : 0
+            Number of Elements    : 0
+            Number of Conditions  : 1
+            Number of Constraints : 0
+ 
+::[PythonSolver]:: : Finished reading model part. 
+Computing model part: -computing_domain- model part
+    Number of tables : 0
+    Number of sub model parts : 0
+
+    Mesh 0 :
+        Number of Nodes       : 121
+        Number of Properties  : 1
+        Number of Elements    : 200
+        Number of Conditions  : 201
+        Number of Constraints : 0
+
+ 
+Read materials: Started
+Read materials: Finished
+::[MechanicalSolver]:: : Constitutive law was successfully imported. 
+::[MechanicalSolver]::: ModelPart prepared for Solver. 
+::[MechanicalSolver]:: : DOF's ADDED 
+VtkOutput: Modelpart "Structure" has both elements and conditions.
+Giving precedence to elements and writing only elements!
+KRATOS TERMINATED WITH ERROR

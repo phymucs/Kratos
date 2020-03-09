@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "MainKratos.py", line 18, in <module>
+    simulation.Run()
+  File "/home/mjeyaramanank/GiDx64/gid-14.1.7d/problemtypes/kratos.gid/exec/Kratos/KratosMultiphysics/analysis_stage.py", line 49, in Run
+    self.Initialize()
+  File "/home/mjeyaramanank/GiDx64/gid-14.1.7d/problemtypes/kratos.gid/exec/Kratos/KratosMultiphysics/StructuralMechanicsApplication/structural_mechanics_analysis.py", line 56, in Initialize
+    super(StructuralMechanicsAnalysis, self).Initialize()
+  File "/home/mjeyaramanank/GiDx64/gid-14.1.7d/problemtypes/kratos.gid/exec/Kratos/KratosMultiphysics/analysis_stage.py", line 87, in Initialize
+    process.ExecuteInitialize()
+  File "/home/mjeyaramanank/GiDx64/gid-14.1.7d/problemtypes/kratos.gid/exec/Kratos/KratosMultiphysics/gid_output_process.py", line 157, in ExecuteInitialize
+    self.nodal_variables = kratos_utilities.GenerateVariableListFromInput(result_file_configuration["nodal_results"])
+  File "/home/mjeyaramanank/GiDx64/gid-14.1.7d/problemtypes/kratos.gid/exec/Kratos/KratosMultiphysics/kratos_utilities.py", line 86, in GenerateVariableListFromInput
+    return [ KM.KratosGlobals.GetVariable( var_name ) for var_name in param.GetStringArray() ]
+  File "/home/mjeyaramanank/GiDx64/gid-14.1.7d/problemtypes/kratos.gid/exec/Kratos/KratosMultiphysics/kratos_utilities.py", line 86, in <listcomp>
+    return [ KM.KratosGlobals.GetVariable( var_name ) for var_name in param.GetStringArray() ]
+  File "/home/mjeyaramanank/GiDx64/gid-14.1.7d/problemtypes/kratos.gid/exec/Kratos/KratosMultiphysics/kratos_globals.py", line 66, in GetVariable
+    raise ValueError("\nKernel.GetVariable() ERROR: Variable {0} is unknown. Maybe you need to import the application where it is defined?\n".format(VarName))
+ValueError: 
+Kernel.GetVariable() ERROR: Variable CONTACT is unknown. Maybe you need to import the application where it is defined?
+

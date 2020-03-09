@@ -69,7 +69,7 @@
                 "mesh_id"         : 0,
                 "model_part_name" : "ShellPrime_2.PointLoad3D_load2",
                 "variable_name"   : "POINT_LOAD",
-                "modulus"         : 100000.0,
+                "modulus"         : 100.0,
                 "constrained"     : false,
                 "direction"       : [0.0,1,0.0]
             }

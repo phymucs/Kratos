@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gid version="13.5">
+  <pre>
+    <layer_to_use name="Layer0"/>
+    <groups>
+      <group id="1" name="DesignSurface" color="#999999ff"/>
+      <group id="2" name="Constraint" color="#0000ffff"/>
+      <group id="3" name="Load" color="#ff00ffff"/>
+      <group id="4" name="Plate" color="#00ffffff"/>
+      <group id="5" name="Total" color="#a60021ff" parent_id="2" state="hidden"/>
+      <group id="6" name="Total" color="#00ff00ff" parent_id="3" state="hidden"/>
+      <group id="7" name="Group0" color="#999999ff"/>
+    </groups>
+    <entities_groups/>
+  </pre>
+</gid>

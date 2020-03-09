@@ -1,6 +1,6 @@
-BeginZE /home/jey/Desktop/CodeWorld/KRATOS/JeyExamples/Bridge.gid/Bridge.vv
-   x -8.59483528137207031 29.1460018157958984
-   y 24.8991603851318359 -13.6803703308105469
+BeginZE /home/mjeyaramanank/Desktop/CodeWorld/KRATOS/JeyExamples/Bridge.gid/Bridge.vv
+   x 0.432067155838012695 20.1191005706787109
+   y 27.5034961700439453 -16.2847061157226562
    z -23.8471145629882812 23.8471145629882812
    e 11.6666669845581055
    v 0.0229133274406194687 -0.0472460426390171051 -0.00343661382794380188
@@ -29,7 +29,7 @@ BeginZE /home/jey/Desktop/CodeWorld/KRATOS/JeyExamples/Bridge.gid/Bridge.vv
    OGLStereo(EyeDistance) 0.075
    OGLStereo(LeftEyeDistance) 1 0 0 1
    OGLStereo(RightEyeDistance) 0 1 1 1
-EndZE /home/jey/Desktop/CodeWorld/KRATOS/JeyExamples/Bridge.gid/Bridge.vv
+EndZE /home/mjeyaramanank/Desktop/CodeWorld/KRATOS/JeyExamples/Bridge.gid/Bridge.vv
 
 BeginMirror
    Mirror 0 Angle 0.0 AngleFake -15.0 SizeFactor 2.0 HeightOffset 0.25 Color #d9e5f24d Backlight Off EdgeStyle No Type Scene DrawMode Mirror

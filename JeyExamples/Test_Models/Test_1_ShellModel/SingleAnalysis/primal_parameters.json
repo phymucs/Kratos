@@ -69,21 +69,9 @@
                 "mesh_id"         : 0,
                 "model_part_name" : "ShellPrime.PointLoad3D_load",
                 "variable_name"   : "POINT_LOAD",
-                "modulus"         : 0,
+                "modulus"         : 900,
                 "constrained"     : false,
                 "direction"       : [0.0,-1,0.0]
-            }
-        },{
-            "python_module" : "assign_vector_by_direction_process",
-            "kratos_module" : "KratosMultiphysics",
-            "process_name"  : "AssignVectorByDirectionProcess",
-            "Parameters"    : {
-                "mesh_id"         : 0,
-                "model_part_name" : "ShellPrime.PointLoad3D_load2",
-                "variable_name"   : "POINT_LOAD",
-                "modulus"         : 0,
-                "constrained"     : false,
-                "direction"       : [0.0,1,0.0]
             }
         }]
     },

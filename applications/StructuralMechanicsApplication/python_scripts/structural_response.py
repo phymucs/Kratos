@@ -69,12 +69,11 @@ class ResponseFunctionBase(object):
 # ==============================================================================
 class Custom_StructuralMechanicsAnalysis(StructuralMechanicsAnalysis):
     
-    def __init__(self, model, ProjectParametersPrimal, optimizationIteration):
+    def __init__(self, model, ProjectParametersPrimal):
         self.x = None
         self.y = None
         self.z = None
         self._model_part = None
-        self.optimizationIteration = optimizationIteration
         super(Custom_StructuralMechanicsAnalysis, self).__init__(model, ProjectParametersPrimal)
 
     def SetCoordinatesUpdate(self, x, y, z, model_part):
@@ -83,15 +82,40 @@ class Custom_StructuralMechanicsAnalysis(StructuralMechanicsAnalysis):
         self.y = y
         self.z = z
         self._model_part = model_part
-        print(self._model_part)
-        # print("::SetCoordinatesUpdateNODES AND MODEL PART RECIEVED::", self._model_part, self._model_part.Name)
+        print("\n::SetCoordinatesUpdateNODES AND MODEL PART RECIEVED::", self._model_part, self._model_part.Name)
 
     def ModifyInitialGeometry(self):
-        # print("::ModifyInitialGeometry CALLED 1::")
+        print("::ModifyInitialGeometry CALLED 1::")
         super(Custom_StructuralMechanicsAnalysis, self).ModifyInitialGeometry()
 
         # print("::Primal Model Part Name: ", self.model)
         # print("::NODES AND MODEL PART RECIEVED::", self._model_part)
+        for node in self._model_part.Nodes:
+            node.X = self.x[node.Id-1]
+            node.Y = self.y[node.Id-1]
+            node.Z = self.z[node.Id-1]
+        KSO.MeshControllerUtilities(self._model_part).SetReferenceMeshToMesh()
+        print("::Nodes Transfered from OPTI MODELPART TO PRIMAL MODELPART::")
+
+# ==============================================================================
+class UpdateCoordinates_MassResponse():
+
+    def __init__(self):
+        self.x = None
+        self.y = None
+        self.z = None
+        self._model_part = None
+
+    def SetCoordinatesUpdate(self, x, y, z, model_part):
+        # x, y, z are coordinates of Opti Model Part
+        self.x = x
+        self.y = y
+        self.z = z
+        self._model_part = model_part
+        print("\n::SetCoordinatesUpdateNODES AND MODEL PART RECIEVED::", self._model_part, self._model_part.Name)
+
+    def ModifyInitialGeometry(self):
+        print("::ModifyInitialGeometry CALLED 1::")
         for node in self._model_part.Nodes:
             node.X = self.x[node.Id-1]
             node.Y = self.y[node.Id-1]
@@ -111,7 +135,7 @@ class StrainEnergyResponseFunction(ResponseFunctionBase):
     response_function_utility: Cpp utilities object doing the actual computation of response value and gradient.
     """
 
-    def __init__(self, identifier, response_settings, model, optimizationIteration):
+    def __init__(self, identifier, response_settings, model):
         self.identifier = identifier
         
         with open(response_settings["primal_settings"].GetString()) as parameters_file:
@@ -119,7 +143,7 @@ class StrainEnergyResponseFunction(ResponseFunctionBase):
         
         # self.primal_analysis = StructuralMechanicsAnalysis(model, ProjectParametersPrimal)
 
-        self.primal_analysis = Custom_StructuralMechanicsAnalysis(model, ProjectParametersPrimal, optimizationIteration)
+        self.primal_analysis = Custom_StructuralMechanicsAnalysis(model, ProjectParametersPrimal)
 
         self.primal_model_part = model.GetModelPart(ProjectParametersPrimal["solver_settings"]["model_part_name"].GetString())
 
@@ -242,6 +266,8 @@ class MassResponseFunction(ResponseFunctionBase):
         self.model = model
         self.model_part_needs_to_be_imported = False
 
+        self.update = UpdateCoordinates_MassResponse()      #Initiate the Update Coordinates & ModelPart
+
         model_part_name = response_settings["model_part_name"].GetString()
         input_type = response_settings["model_import_settings"]["input_type"].GetString()
         if input_type == "mdpa":
@@ -265,6 +291,8 @@ class MassResponseFunction(ResponseFunctionBase):
             # import model part
             model_part_io = KratosMultiphysics.ModelPartIO(self.response_settings["model_import_settings"]["input_filename"].GetString())
             model_part_io.ReadModelPart(self.model_part)
+
+            self.update.ModifyInitialGeometry()     #Update Coordinates from Opti to Primal ModelPart
 
         # Add constitutive laws and material properties from json file to model parts.
         material_settings = KratosMultiphysics.Parameters("""{"Parameters": {} }""")

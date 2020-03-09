@@ -64,7 +64,7 @@
                 "mesh_id"         : 0,
                 "model_part_name" : "HookPrime_2.SurfacePressure3D_load",
                 "variable_name"   : "NEGATIVE_FACE_PRESSURE",
-                "value"           : 1000
+                "value"           : -100
             }
         }]
     },
@@ -74,13 +74,13 @@
             "kratos_module" : "KratosMultiphysics",
             "process_name"  : "VTKOutputProcess",
             "Parameters"    : {
-                "model_part_name": "Hook_MultiAnalysis_2",
+                "model_part_name": "HookPrime_2",
                 "file_format": "ascii",
                 "output_precision": 7,
                 "output_control_type": "step",
                 "output_frequency": 1.0,
                 "output_sub_model_parts": true,
-                "folder_name": "Primal_Results",
+                "folder_name": "Primal_Results_2",
                 "save_output_files_in_folder": true,
                 "nodal_solution_step_data_variables": [],
                 "nodal_data_value_variables": ["DISPLACEMENT","REACTION"],
