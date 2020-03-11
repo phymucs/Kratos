@@ -242,7 +242,8 @@ void RansEvmKEpsilonVmsMonolithicWall<TDim, TNumNodes>::ApplyWallLaw(
             }
 
             condition_u_tau /= static_cast<double>(number_of_gauss_points);
-            this->SetValue(FRICTION_VELOCITY, condition_u_tau);
+            this->SetValue(FRICTION_VELOCITY, condition_u_tau * wall_cell_center_velocity /
+                                                  wall_cell_center_velocity_magnitude);
         }
 
         this->SetValue(RANS_Y_PLUS, std::max(y_plus, y_plus_limit));

@@ -25,8 +25,8 @@
 #include "custom_elements/evm_k_epsilon/rans_evm_k_epsilon_k.h"
 #include "custom_elements/evm_k_epsilon/rans_evm_k_epsilon_low_re_epsilon.h"
 #include "custom_elements/evm_k_epsilon/rans_evm_k_epsilon_low_re_k.h"
-#include "custom_elements/potential_flow/incompressible_velocity_potential_element.h"
-#include "custom_elements/potential_flow/pressure_potential_element.h"
+// #include "custom_elements/potential_flow/incompressible_velocity_potential_element.h"
+//#include "custom_elements/potential_flow/pressure_potential_element.h"
 
 // Condition includes
 #include "custom_conditions/evm_k_epsilon/rans_evm_k_epsilon_epsilon_wall.h"
@@ -185,17 +185,17 @@ private:
     ///@name Member Variables
     ///@{
 
-    /// Potential flow elements
-    const IncompressibleVelocityPotentialElement<2, 3> mIncompressibleVelocityPotentialElement2D;
-    const IncompressibleVelocityPotentialElement<3, 4> mIncompressibleVelocityPotentialElement3D;
-    const PressurePotentialElement<2, 3> mPressurePotentialElement2D;
-    const PressurePotentialElement<3, 4> mPressurePotentialElement3D;
+    // /// Potential flow elements
+    // const IncompressibleVelocityPotentialElement<2, 3> mIncompressibleVelocityPotentialElement2D;
+    // const IncompressibleVelocityPotentialElement<3, 4> mIncompressibleVelocityPotentialElement3D;
+    // const PressurePotentialElement<2, 3> mPressurePotentialElement2D;
+    // const PressurePotentialElement<3, 4> mPressurePotentialElement3D;
 
-    /// Potential flow conditions
-    const IncompressibleVelocityPotentialCondition<2, 2> mIncompressibleVelocityPotentialCondition2D2N;
-    const IncompressibleVelocityPotentialCondition<3, 3> mIncompressibleVelocityPotentialCondition3D3N;
-    const IncompressiblePressureCondition<2, 2> mIncompressiblePressureCondition2D2N;
-    const IncompressiblePressureCondition<3, 3> mIncompressiblePressureCondition3D3N;
+    // /// Potential flow conditions
+    // const IncompressibleVelocityPotentialCondition<2, 2> mIncompressibleVelocityPotentialCondition2D2N;
+    // const IncompressibleVelocityPotentialCondition<3, 3> mIncompressibleVelocityPotentialCondition3D3N;
+    // const IncompressiblePressureCondition<2, 2> mIncompressiblePressureCondition2D2N;
+    // const IncompressiblePressureCondition<3, 3> mIncompressiblePressureCondition3D3N;
 
     /// k-epsilon turbulence model elements
     const RansEvmKEpsilonLowReKElement<2, 3> mRansEvmKEpsilonLowReK2D;

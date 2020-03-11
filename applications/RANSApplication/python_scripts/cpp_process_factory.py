@@ -94,6 +94,10 @@ def Factory(settings, Model):
         [
             "KEpsilonDomainInitializationProcess",
             KratosRANS.RansKEpsilonDomainInitializationProcess
+        ],
+        [
+            "ComputeReactionsProcess",
+            KratosRANS.RansComputeReactionsProcess
         ]
     ]
 
