@@ -26,5 +26,19 @@ if __name__ == "__main__":
     optimizer = optimizer_factory.CreateOptimizer(parameters["optimization_settings"], model)
     optimizer.Optimize()
 
+    
     # Cleaning
+    original_directory = os.getcwd()
+    output_directory = parameters["optimization_settings"]["output"]["output_directory"].GetString()
+    optimization_model_part_name = parameters["optimization_settings"]["model_settings"]["model_part_name"].GetString()
+    optimization_log_filename = parameters["optimization_settings"]["output"]["optimization_log_filename"].GetString() + ".csv"
+    response_combination_filename = "response_combination.csv"
+
+    
     kratos_utilities.DeleteDirectoryIfExisting("__pycache__")
+    # kratos_utilities.DeleteDirectoryIfExisting(output_directory)
+    kratos_utilities.DeleteFileIfExisting(os.path.basename(original_directory)+".post.lst")
+    kratos_utilities.DeleteFileIfExisting("plateThick4N.post.bin")
+    kratos_utilities.DeleteFileIfExisting(optimization_model_part_name+".time")
+    kratos_utilities.DeleteFileIfExisting(response_combination_filename)
+    kratos_utilities.DeleteFileIfExisting(optimization_log_filename)
