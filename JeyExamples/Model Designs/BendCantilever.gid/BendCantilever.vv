@@ -1,0 +1,37 @@
+BeginZE /home/mjeyaramanank/Downloads/Model Designs/BendCantilever.gid/BendCantilever.vv
+   x -3.9233853816986084 29.4680461883544922
+   y 10.4465627670288086 -19.9231662750244141
+   z -19.3597335815429688 34.5579795837402344
+   e 12.9903812408447266
+   v 0.0639183211484568303 -0.127936330049681718 -0.0904926436116736121
+   r -0.985574802993046117
+   m 0.950886726379394531 -0.19472949206829071 0.240613371133804321 0 0.162019580602645874 0.975451052188873291 0.149147167801856995 0 -0.263749927282333374 -0.102837979793548584 0.95909351110458374 0 0 0 0 1
+   c 10.9430837631225586 -4.19768381118774414 -7.59912347793579102
+   pd 0
+   pno 0
+   pfo 0
+   pf 4
+   pv 0
+   NowUse 1
+   DrawingType 2
+   LightVector 90 90 150 0
+   OGLShadow(UseShadows) 0
+   OGLShadow(RenderMode) RenderNice
+   OGLShadow(ShadowBias) -0.002
+   OGLShadow(AmbientShadows) 1
+   OGLShadow(UseFBO) 0
+   OGLShadow(FBOSize) 2048
+   OGLShadow(DimmedLightFactor) 0.02
+   OGLStereo(UseStereo) 0
+   OGLStereo(RelativeEyeDistance) 1
+   OGLStereo(FlipEyes) 0
+   OGLStereo(StereoMode) AnaglyphColors
+   OGLStereo(EyeDistance) 0.075
+   OGLStereo(LeftEyeDistance) 1 0 0 1
+   OGLStereo(RightEyeDistance) 0 1 1 1
+EndZE /home/mjeyaramanank/Downloads/Model Designs/BendCantilever.gid/BendCantilever.vv
+
+BeginMirror
+   Mirror 0 Angle 0.0 AngleFake -15.0 SizeFactor 2.0 HeightOffset 0.25 Color #d9e5f24d Backlight Off EdgeStyle No Type Scene DrawMode Mirror
+EndMirror
+

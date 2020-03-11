@@ -15,12 +15,12 @@ Initializing KratosStructuralMechanicsApplication...
 ::[StaticMechanicalSolver]:: : Construction finished 
 ::[MechanicalSolver]:: : Variables ADDED 
 ::[PythonSolver]::: Reading model part. 
-::[PythonSolver]::: Reading model part from file: /home/mjeyaramanank/Desktop/CodeWorld/KRATOS/JeyExamples/Model Designs/plateThin3N.gid/plateThin3N.mdpa 
-ModelPartIO:   [Reading Nodes    : 121 nodes read]
-ModelPartIO:   [Reading Elements : 200 elements read] [Type: ShellThinElementCorotational3D3N]
+::[PythonSolver]::: Reading model part from file: /home/mjeyaramanank/Downloads/Model Designs/BendCantilever.gid/BendCantilever.mdpa 
+ModelPartIO:   [Reading Nodes    : 10716 nodes read]
+ModelPartIO:   [Reading Elements : 21000 elements read] [Type: ShellThinElementCorotational3D3N]
 ModelPartIO:   [Reading Conditions : 1 conditions read] [Type: PointLoadCondition3D1N]
-ModelPartIO:   [Reading Conditions : 200 conditions read] [Type: SurfaceCondition3D3N]
-ModelPartIO:   [Total Lines Read : 1239]
+ModelPartIO:   [Reading Conditions : 21000 conditions read] [Type: SurfaceCondition3D3N]
+ModelPartIO:   [Total Lines Read : 116225]
 ::[PythonSolver]::: Finished reading model part from mdpa file. 
 ModelPart: -Structure- model part
     Buffer Size : 1
@@ -31,10 +31,10 @@ ModelPart: -Structure- model part
     IS_RESTARTED : 0
 
     Mesh 0 :
-        Number of Nodes       : 121
+        Number of Nodes       : 10716
         Number of Properties  : 1
-        Number of Elements    : 200
-        Number of Conditions  : 201
+        Number of Elements    : 21000
+        Number of Conditions  : 21001
         Number of Constraints : 0
 
     -DISPLACEMENT_Constraint- model part
@@ -42,7 +42,7 @@ ModelPart: -Structure- model part
         Number of sub model parts : 0
 
         Mesh 0 :
-            Number of Nodes       : 21
+            Number of Nodes       : 22
             Number of Properties  : 0
             Number of Elements    : 0
             Number of Conditions  : 0
@@ -52,22 +52,22 @@ ModelPart: -Structure- model part
         Number of sub model parts : 0
 
         Mesh 0 :
-            Number of Nodes       : 121
+            Number of Nodes       : 10716
             Number of Properties  : 0
             Number of Elements    : 0
-            Number of Conditions  : 200
+            Number of Conditions  : 21000
             Number of Constraints : 0
-    -Parts_Plate- model part
+    -Parts_Structure- model part
         Number of tables : 0
         Number of sub model parts : 0
 
         Mesh 0 :
-            Number of Nodes       : 121
+            Number of Nodes       : 10716
             Number of Properties  : 0
-            Number of Elements    : 200
+            Number of Elements    : 21000
             Number of Conditions  : 0
             Number of Constraints : 0
-    -PointLoad3D_Load- model part
+    -PointLoad3D_PointLoad1- model part
         Number of tables : 0
         Number of sub model parts : 0
 
@@ -84,10 +84,10 @@ Computing model part: -computing_domain- model part
     Number of sub model parts : 0
 
     Mesh 0 :
-        Number of Nodes       : 121
+        Number of Nodes       : 10716
         Number of Properties  : 1
-        Number of Elements    : 200
-        Number of Conditions  : 201
+        Number of Elements    : 21000
+        Number of Conditions  : 21001
         Number of Constraints : 0
 
  
@@ -98,4 +98,14 @@ Read materials: Finished
 ::[MechanicalSolver]:: : DOF's ADDED 
 VtkOutput: Modelpart "Structure" has both elements and conditions.
 Giving precedence to elements and writing only elements!
-KRATOS TERMINATED WITH ERROR
+::[MechanicalSolver]:: : Initializing ... 
+::[MechanicalSolver]:: No linear solver was specified, using fastest available solver: 
+Importing    KratosExternalSolversApplication 
+Initializing KratosExternalSolversApplication...
+Linear-Solver-Factory: Creating "super_lu" as fastest available direct solver 
+::[MechanicalSolver]:: : Finished initialization. 
+::[KSM Simulation]:: : Analysis -START-  
+::[KSM Simulation]:: : STEP:  1 
+::[KSM Simulation]:: : TIME:  1.1 
+::[KSM Simulation]:: : Analysis -END-  
+KRATOS TERMINATED CORRECTLY
