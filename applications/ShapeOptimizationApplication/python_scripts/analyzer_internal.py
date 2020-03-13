@@ -13,17 +13,18 @@
 from __future__ import print_function, absolute_import, division
 
 # Kratos Core and Apps
-import KratosMultiphysics as km
+import KratosMultiphysics as KM
 import KratosMultiphysics.ShapeOptimizationApplication as KSO
 
 from KratosMultiphysics.ShapeOptimizationApplication import model_part_controller_factory
 
 # Additional imports
-from KratosMultiphysics.StructuralMechanicsApplication import structural_response_function_factory as csm_response_factory
 from .analyzer_base import AnalyzerBaseClass
-from KratosMultiphysics.StructuralMechanicsApplication import structural_response
-from KratosMultiphysics.StructuralMechanicsApplication.structural_mechanics_analysis import StructuralMechanicsAnalysis
-from KratosMultiphysics import Parameters
+from .response_functions import response_function_factory as sho_response_factory
+try:
+    from KratosMultiphysics.StructuralMechanicsApplication import structural_response_function_factory as csm_response_factory
+except ImportError:
+    csm_response_factory = None
 import time as timer
 import shutil
 import glob, os
@@ -70,9 +71,9 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             #     print(node.Id, node.X, node.Y, node.Z)
             # print(node.Id, x[node.Id-1], y[node.Id-1], z[node.Id-1])
        
-        time_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.TIME)
-        step_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.STEP)
-        delta_time_before_analysis = optimization_model_part.ProcessInfo.GetValue(km.DELTA_TIME)
+        time_before_analysis = optimization_model_part.ProcessInfo.GetValue(KM.TIME)
+        step_before_analysis = optimization_model_part.ProcessInfo.GetValue(KM.STEP)
+        delta_time_before_analysis = optimization_model_part.ProcessInfo.GetValue(KM.DELTA_TIME)
 
         response_type = []
 
@@ -98,9 +99,9 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
         for identifier, response in self.response_functions.items():        
 
             # Reset step/time iterators such that they match the optimization iteration after calling CalculateValue (which internally calls CloneTimeStep)
-            optimization_model_part.ProcessInfo.SetValue(km.STEP, step_before_analysis-1)
-            optimization_model_part.ProcessInfo.SetValue(km.TIME, time_before_analysis-1)
-            optimization_model_part.ProcessInfo.SetValue(km.DELTA_TIME, 0)
+            optimization_model_part.ProcessInfo.SetValue(KM.STEP, step_before_analysis-1)
+            optimization_model_part.ProcessInfo.SetValue(KM.TIME, time_before_analysis-1)
+            optimization_model_part.ProcessInfo.SetValue(KM.DELTA_TIME, 0)
 
             response.SetCoordinatesUpdate(x, y, z)  #Transfer the Opti ITR Node Coordinates
 
@@ -127,9 +128,9 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             response.FinalizeSolutionStep()
 
             # Clear results or modifications on model part
-            optimization_model_part.ProcessInfo.SetValue(km.STEP, step_before_analysis)
-            optimization_model_part.ProcessInfo.SetValue(km.TIME, time_before_analysis)
-            optimization_model_part.ProcessInfo.SetValue(km.DELTA_TIME, delta_time_before_analysis)
+            optimization_model_part.ProcessInfo.SetValue(KM.STEP, step_before_analysis)
+            optimization_model_part.ProcessInfo.SetValue(KM.TIME, time_before_analysis)
+            optimization_model_part.ProcessInfo.SetValue(KM.DELTA_TIME, delta_time_before_analysis)
 
             # self.model_part_controller.SetMeshToReferenceMesh()
 
@@ -149,15 +150,22 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
     def __CreateResponseFunctions( specified_responses, model ):
         response_functions = {}
 
-        available_csm_response_functions = ["strain_energy", "mass", "eigenfrequency", "adjoint_local_stress", "adjoint_max_stress"]
+        sho_response_functions = ["plane_based_packaging", "mesh_based_packaging"]
+        csm_response_functions = ["strain_energy", "mass", "eigenfrequency", "adjoint_local_stress", "adjoint_max_stress"]
 
         for (response_id, response_settings) in specified_responses:
             if response_id in response_functions.keys():
                 raise NameError("There are multiple response functions with the following identifier: " + response_id)
 
-            if response_settings["response_type"].GetString() in available_csm_response_functions:
+            response_type = response_settings["response_type"].GetString()
+
+            if response_type in csm_response_functions:
+                if csm_response_factory is None:
+                    raise RuntimeError("ShapeOpt: {} response function requires StructuralMechanicsApplication.".format(response_type))
                 response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, model)
+            elif response_type in sho_response_functions:
+                response_functions[response_id] = sho_response_factory.CreateResponseFunction(response_id, response_settings, model)
             else:
-                raise NameError("The following structural response function is not available: " + response_id)
+                raise NameError("The response function '{}' of type '{}' is not available.".format(response_id, response_type))
 
         return response_functions
