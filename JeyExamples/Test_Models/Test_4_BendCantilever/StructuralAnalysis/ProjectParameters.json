@@ -14,7 +14,7 @@
         "analysis_type"                   : "linear",
         "model_import_settings"           : {
             "input_type"     : "mdpa",
-            "input_filename" : "BendCantilever"
+            "input_filename" : "BendCantilever_SingleSurface"
         },
         "material_import_settings"        : {
             "materials_filename" : "StructuralMaterials.json"
@@ -36,6 +36,16 @@
                 "constrained"     : [true,true,true],
                 "value"           : [0.0,0.0,0.0]
             }
+        },{
+            "python_module" : "assign_vector_variable_process",
+            "kratos_module" : "KratosMultiphysics",
+            "Parameters"    : {
+                "model_part_name" : "Structure.ROTATION_Constraint",
+                "variable_name"   : "ROTATION",
+                "interval"        : [0.0,"End"],
+                "constrained"     : [true,true,true],
+                "value"           : [0.0,0.0,0.0]
+            }
         }],
         "loads_process_list"       : [{
             "python_module" : "assign_vector_by_direction_to_condition_process",
@@ -45,8 +55,8 @@
                 "model_part_name" : "Structure.PointLoad3D_PointLoad1",
                 "variable_name"   : "POINT_LOAD",
                 "interval"        : [0.0,"End"],
-                "modulus"         : 25.0,
-                "direction"       : [1,0.0,0.0]
+                "modulus"         : 250.0,
+                "direction"       : [-1,0.0,0.0]
             }
         }],
         "list_other_processes"     : []
@@ -59,7 +69,7 @@
             "help"          : "This process writes postprocessing files for GiD",
             "Parameters"    : {
                 "model_part_name"        : "Structure",
-                "output_name"            : "BendCantilever",
+                "output_name"            : "BendCantilever_SMA",
                 "postprocess_parameters" : {
                     "result_file_configuration" : {
                         "gidpost_flags"               : {

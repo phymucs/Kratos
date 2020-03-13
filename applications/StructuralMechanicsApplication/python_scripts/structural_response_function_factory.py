@@ -25,6 +25,18 @@ class Custom_Mass_Response(MassResponseFunction):
     def SetCoordinatesUpdate(self, x, y, z):
         self.update.SetCoordinatesUpdate(x, y, z, self.model_part)
 
+
+#============================================================================================================
+class Custom_AdjointStrain_Response(structural_response.AdjointResponseFunction):
+
+    def __init__(self, response_id, response_settings, model):
+        super(Custom_AdjointStrain_Response, self).__init__(response_id, response_settings, model)
+        self.model = model
+
+    def SetCoordinatesUpdate(self, x, y, z):
+        self.primal_analysis.SetCoordinatesUpdate(x, y, z, self.primal_model_part)
+
+
 #============================================================================================================
 def CreateResponseFunction(response_id, response_settings, model):
     response_type = response_settings["response_type"].GetString()
@@ -44,7 +56,7 @@ def CreateResponseFunction(response_id, response_settings, model):
         return structural_response.AdjointResponseFunction(response_id, response_settings, model)
 
     elif response_type == "adjoint_linear_strain_energy":
-        return structural_response.AdjointResponseFunction(response_id, response_settings, model)
+        return Custom_AdjointStrain_Response(response_id, response_settings, model)
 
     elif response_type == "adjoint_local_stress":
         return structural_response.AdjointResponseFunction(response_id, response_settings, model)

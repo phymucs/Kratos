@@ -11,7 +11,7 @@ import KratosMultiphysics.ShapeOptimizationApplication as KSO
 import time as timer
 
 def _GetModelPart(model, solver_settings):
-    raise RuntimeError("This is deprecated: _GetModelPart")
+    # raise RuntimeError("This is deprecated: _GetModelPart")
     #TODO can be removed once model is fully available
     model_part_name = solver_settings["model_part_name"].GetString()
     if not model.HasModelPart(model_part_name):
@@ -348,7 +348,7 @@ class AdjointResponseFunction(ResponseFunctionBase):
 
         self.primal_model_part = _GetModelPart(model, primal_parameters["solver_settings"])
 
-        self.primal_analysis = StructuralMechanicsAnalysis(model, primal_parameters)
+        self.primal_analysis = Custom_StructuralMechanicsAnalysis(model, primal_parameters)
 
         # Create the adjoint solver
         adjoint_parameters = self._GetAdjointParameters()
