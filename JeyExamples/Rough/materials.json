@@ -1,0 +1,20 @@
+{
+    "properties": [
+        {
+            "Material": {
+                "Tables": {},
+                "Variables": {
+                    "DENSITY": 7.872e-06,
+                    "POISSON_RATIO": 0.25,
+                    "YOUNG_MODULUS": 200000000.0
+                },
+                "constitutive_law": {
+                    "name": "KratosMultiphysics.StructuralMechanicsApplication.LinearElastic3DLaw"
+                },
+                "name": "Material"
+            },
+            "model_part_name": "structure.PSOLID1",
+            "properties_id": 1
+        }
+    ]
+}

@@ -1,0 +1,94 @@
+{
+    "optimization_settings": {
+        "constraints": [],
+        "constraints_set_by_user": true,
+        "damping_selection_mode": "Manual",
+        "design_surface_selection_mode": "Manual",
+        "design_variables": {
+            "damping": {
+                "damping_regions": [
+                    {
+                        "damp_X": true,
+                        "damp_Y": true,
+                        "damp_Z": true,
+                        "damping_function_type": "cosine",
+                        "damping_radius": 20.0,
+                        "sub_model_part_name": "manual_damping"
+                    }
+                ],
+                "perform_damping": true
+            },
+            "design_surface_sub_model_part_name": "design_surface",
+            "domain_size": 3,
+            "filter": {
+                "consistent_mapping_to_geometry_space": false,
+                "filter_function_type": "linear",
+                "filter_radius": 30.0,
+                "integration": {
+                    "integration_method": "area_weighted_sum",
+                    "number_of_gauss_points": 0
+                },
+                "matrix_free_filtering": false,
+                "max_nodes_in_filter_radius": 10000
+            },
+            "mesh_motion": {
+                "apply_mesh_solver": true,
+                "solver_settings": {
+                    "compute_reactions": true,
+                    "mesh_motion_linear_solver_settings": {
+                        "coarsening_type": "aggregation",
+                        "krylov_type": "bicgstab",
+                        "max_iteration": 500,
+                        "provide_coordinates": false,
+                        "scaling": false,
+                        "smoother_type": "ilu0",
+                        "solver_type": "AMGCL",
+                        "tolerance": 1e-07,
+                        "verbosity": 1
+                    },
+                    "solver_type": "mesh_solver_structural_similarity"
+                }
+            },
+            "optimization_model_part_name": "structure",
+            "type": "vertex_morphing"
+        },
+        "design_variables_set_by_user": true,
+        "line_search": {
+            "line_search_type": "manual_stepping",
+            "normalize_search_direction": true,
+            "set_by_user": true,
+            "step_size": 1.5
+        },
+        "objectives": [{
+            "identifier" : "strain_energy",
+            "type"       : "minimization",
+            "analyzer" : "kratos",
+            "response_settings":{
+                "response_type"          : "strain_energy",
+                "primal_settings"        : "Response.json",
+                "gradient_mode"          : "semi_analytic",
+                "step_size"              : 1e-5
+            },
+            "project_gradient_on_surface_normals" : true
+        }],
+        "optimization_algorithm": {
+            "name"               : "steepest_descent",
+            "max_iterations"     : 3,
+            "relative_tolerance" : 1e-2,
+            "line_search" : {
+                "line_search_type"           : "manual_stepping",
+                "normalize_search_direction" : true,
+                "step_size"                  : 1.5
+            }
+        },
+        "output": {
+            "design_history_filename": "design_history",
+            "design_output_mode": "WriteOptimizationModelPart",
+            "nodal_results": ["SHAPE_CHANGE", "DF1DX" ],
+            "output_directory": "Optimization_Results",
+            "output_format": {
+                "name": "gid"
+            }
+        }
+    }
+}
