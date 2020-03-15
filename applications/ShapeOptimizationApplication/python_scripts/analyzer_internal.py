@@ -17,6 +17,7 @@ import KratosMultiphysics as KM
 import KratosMultiphysics.ShapeOptimizationApplication as KSO
 
 from KratosMultiphysics.ShapeOptimizationApplication import model_part_controller_factory
+import KratosMultiphysics.kratos_utilities as kratos_utilities
 
 # Additional imports
 from .analyzer_base import AnalyzerBaseClass
@@ -36,6 +37,7 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
         self.model_part_controller = model_part_controller
         self.specified_responses = specified_responses
         self.model = model_part_controller.GetModel()
+        self.original_directory = os.getcwd()
   
     #---------------------------------------------------------------------------
     def DirForOptimization(self, OptiFile, itr , FolderName):
@@ -68,26 +70,16 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
         step_before_analysis = optimization_model_part.ProcessInfo.GetValue(KM.STEP)
         delta_time_before_analysis = optimization_model_part.ProcessInfo.GetValue(KM.DELTA_TIME)
 
-
-        response_directory = {}
-        original_directory = os.getcwd()
-
         if optimizationIteration == 1:
-            self.response_functions = {}
+
+            self.response_functions = {} 
+
             for (response_id, response_settings) in self.specified_responses:
-                # TODO NO NEED TO FOR THIS RESPONSE DIRECTORY !!               Create Response Folders -> ONE Time Use
-                response_directory[response_id] = original_directory + "Response_", response_id
-                                                                                    # Create Optimization Iteration Folder
-                os.makedirs(str(response_directory[response_id])+'/Opti_ITR_'+str(optimizationIteration))
-                                                                                    # Change Directory to ~/Response[i]/Opti_ITR_[i]/
-                os.chdir(str(response_directory[response_id]) + '/Opti_ITR_'+str(optimizationIteration))
+                # Clean OLD Response Folder
+                kratos_utilities.DeleteDirectoryIfExisting('Response_'+response_id)
 
                 self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model) 
 
-                #Change Directory to Original Location
-                os.chdir(original_directory) 
-
-        
         else:    
             for identifier, response in self.response_functions.items():
                 if identifier == "mass":
@@ -98,21 +90,11 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
                     print("::ModelPart Deleted::", response.primal_model_part.Name)
 
             for (response_id, response_settings) in self.specified_responses:
-                # Create Optimization Iteration Folder
-                os.makedirs(response_directory[response_id]+'/Opti_ITR_'+str(optimizationIteration))
-                # Change Directory to ~/Response[i]/Opti_ITR_[i]/
-                os.chdir(response_directory[response_id] + '/Opti_ITR_'+str(optimizationIteration))
-
                 self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model)
 
-                #Change Directory to Original Location
-                os.chdir(original_directory)  
 
         
         for identifier, response in self.response_functions.items():    
-            
-            # Change Directory to ~/Response[i]/Opti_ITR_[i]/
-            os.chdir(response_directory[identifier] + '/Opti_ITR_'+str(optimizationIteration))
 
             # Reset step/time iterators such that they match the optimization iteration after calling CalculateValue (which internally calls CloneTimeStep)
             optimization_model_part.ProcessInfo.SetValue(KM.STEP, step_before_analysis-1)
@@ -122,6 +104,11 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             response.SetCoordinatesUpdate(x, y, z)  #Transfer the Opti ITR Node Coordinates
 
             response.Initialize()
+
+            # Create Optimization Iteration Folder
+            os.makedirs('Response_'+identifier +'/Opti_ITR_'+str(optimizationIteration))
+            # Change Directory to ~/Response[i]/Opti_ITR_[i]/
+            os.chdir('Response_'+identifier + '/Opti_ITR_'+str(optimizationIteration))
             
             response.InitializeSolutionStep()
 
@@ -146,12 +133,10 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             # Clear results or modifications on model part
             optimization_model_part.ProcessInfo.SetValue(KM.STEP, step_before_analysis)
             optimization_model_part.ProcessInfo.SetValue(KM.TIME, time_before_analysis)
-            optimization_model_part.ProcessInfo.SetValue(KM.DELTA_TIME, delta_time_before_analysis)     
-        
-            #Change Directory to Original Location
-            os.chdir(original_directory)
-                
-        
+            optimization_model_part.ProcessInfo.SetValue(KM.DELTA_TIME, delta_time_before_analysis)  
+
+            # Change to Original folder
+            os.chdir(self.original_directory)               
 
     # --------------------------------------------------------------------------
     def FinalizeAfterOptimizationLoop( self ):

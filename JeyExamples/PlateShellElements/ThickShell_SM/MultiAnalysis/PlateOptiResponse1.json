@@ -60,7 +60,7 @@
             "help"          : "This process writes postprocessing files for GiD",
             "Parameters"    : {
                 "model_part_name"        : "Struct_Load_1",
-                "output_name"            : "plateThick4N1",
+                "output_name"            : "plateThick4N_1",
                 "postprocess_parameters" : {
                     "result_file_configuration" : {
                         "gidpost_flags"               : {

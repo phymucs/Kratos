@@ -68,7 +68,7 @@
         },
         "optimization_algorithm" : {
             "name"               : "steepest_descent",
-            "max_iterations"     : 20,
+            "max_iterations"     : 2,
             "relative_tolerance" : 1e-10,
             "line_search" : {
                 "line_search_type"           : "manual_stepping",

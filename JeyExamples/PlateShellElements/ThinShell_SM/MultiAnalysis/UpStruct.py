@@ -26,18 +26,18 @@ class CustomAnalysis(StructuralMechanicsAnalysis):
         self.x = x
         self.y = y
         self.z = z
-        self.primal_model_part2 = model.GetModelPart("Struct_Load_1")
+        self.primal_model_part2 = model.GetModelPart("Struct_Load_2")
         print("::NODES AND MODEL PART RECIEVED::", self.primal_model_part2)
 
     def ModifyInitialGeometry(self):
         print("::ModifyInitialGeometry CALLED 1::")
         super(CustomAnalysis, self).ModifyInitialGeometry()
         print("::NODES AND MODEL PART RECIEVED::", self.primal_model_part2)
-        for node in self.model.GetModelPart("Struct_Load_1").Nodes:
+        for node in self.model.GetModelPart("Struct_Load_2").Nodes:
             node.X = self.x[node.Id-1]
             node.Y = self.y[node.Id-1]
             node.Z = self.z[node.Id-1]
-        KSO.MeshControllerUtilities(self.model.GetModelPart("Struct_Load_1")).SetReferenceMeshToMesh()
+        KSO.MeshControllerUtilities(self.model.GetModelPart("Struct_Load_2")).SetReferenceMeshToMesh()
         print("::Nodes Transfered from OPTI MODELPART TO PRIMAL MODELPART::")
 
 if __name__ == "__main__":
@@ -68,22 +68,31 @@ if __name__ == "__main__":
     model = KM.Model()
     simulation2 = CustomAnalysis(model,parameters)
     simulation2.SetCoordinatesUpdate(x, y, z)
+
+    shutil.rmtree('Response')
+    original = os.getcwd()
+    os.makedirs('Response')
+    
     
     simulation2.Initialize()
-    primal_model_part2 = model.GetModelPart("Struct_Load_1")
+
+    primal_model_part2 = model.GetModelPart("Struct_Load_2")
 
     time = primal_model_part2.ProcessInfo.GetValue(KM.TIME)
     time = simulation2._GetSolver().AdvanceInTime(time)
     simulation2.InitializeSolutionStep()
-
+    os.chdir('Response')
     simulation2._GetSolver().Predict()       
     simulation2._GetSolver().SolveSolutionStep()
-
     simulation2.FinalizeSolutionStep()
     simulation2.OutputSolutionStep()
     simulation2.Finalize()
+
+    os.chdir(original)
 
     # Cleaning
     kratos_utilities.DeleteDirectoryIfExisting("__pycache__")
     response_combination_filename = "response_combination.csv"
     kratos_utilities.DeleteFileIfExisting(response_combination_filename)
+    kratos_utilities.DeleteFileIfExisting("plateThin3N.post")
+    kratos_utilities.DeleteFileIfExisting("MultiAnalysis.post")
