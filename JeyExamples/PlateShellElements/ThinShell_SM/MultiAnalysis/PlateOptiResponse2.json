@@ -45,7 +45,7 @@
                 "model_part_name" : "Struct_Load_2.PointLoad3D_Load",
                 "variable_name"   : "POINT_LOAD",
                 "interval"        : [0.0,"End"],
-                "modulus"         : 250.0,
+                "modulus"         : 2.0,
                 "direction"       : [0.0,0.0,1]
             }
         }],

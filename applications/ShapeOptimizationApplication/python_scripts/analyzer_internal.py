@@ -105,10 +105,10 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
 
             response.Initialize()
 
-            # Create Optimization Iteration Folder
-            os.makedirs('Response_'+identifier +'/Opti_ITR_'+str(optimizationIteration))
-            # Change Directory to ~/Response[i]/Opti_ITR_[i]/
-            os.chdir('Response_'+identifier + '/Opti_ITR_'+str(optimizationIteration))
+            # # Create Optimization Iteration Folder
+            # os.makedirs('Response_'+identifier +'/Opti_ITR_'+str(optimizationIteration))
+            # # Change Directory to ~/Response[i]/Opti_ITR_[i]/
+            # os.chdir('Response_'+identifier + '/Opti_ITR_'+str(optimizationIteration))
             
             response.InitializeSolutionStep()
 
@@ -121,6 +121,9 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             if communicator.isRequestingGradientOf(identifier):
                 response.CalculateGradient()
                 communicator.reportGradient(identifier, response.GetShapeGradient())
+
+            # vtk_ouput = Kratos.VtkOutput(model_part, json_settings)
+            # vtk_ouput.PrintOutput(filename)
             
             # print("\n::Gradient Info::", identifier)
             # self.gradient = response.GetShapeGradient()
@@ -135,8 +138,8 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             optimization_model_part.ProcessInfo.SetValue(KM.TIME, time_before_analysis)
             optimization_model_part.ProcessInfo.SetValue(KM.DELTA_TIME, delta_time_before_analysis)  
 
-            # Change to Original folder
-            os.chdir(self.original_directory)               
+            # # Change to Original folder
+            # os.chdir(self.original_directory)               
 
     # --------------------------------------------------------------------------
     def FinalizeAfterOptimizationLoop( self ):

@@ -78,7 +78,13 @@
         },
         "output" : {
             "design_output_mode" : "WriteDesignSurface",
-            "nodal_results"      : [ "SHAPE_CHANGE" ],
+            "nodal_results"      : [ "NORMALIZED_SURFACE_NORMAL",
+                                    "DF1DX",
+                                    "DF1DX_MAPPED",
+                                    "CONTROL_POINT_UPDATE",
+                                    "CONTROL_POINT_CHANGE",
+                                    "SHAPE_UPDATE",
+                                    "SHAPE_CHANGE" ],
             "output_format" : {
                 "name": "gid"
             }

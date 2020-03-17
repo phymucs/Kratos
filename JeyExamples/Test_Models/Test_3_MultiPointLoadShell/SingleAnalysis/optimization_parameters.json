@@ -16,7 +16,7 @@
                         "damp_Y"                : true,
                         "damp_Z"                : true,
                         "damping_function_type" : "cosine",
-                        "damping_radius"        : 4.0
+                        "damping_radius"        : 2.0
                     }]
             },
             "mesh_motion" : {
@@ -40,13 +40,13 @@
             "type"  : "vertex_morphing",
             "filter" : {
                 "filter_function_type"       : "linear",
-                "filter_radius"              : 3.0,
+                "filter_radius"              : 2.0,
                 "max_nodes_in_filter_radius" : 10000
             }
         },
         "optimization_algorithm" : {
             "name"               : "steepest_descent",
-            "max_iterations"     : 1,
+            "max_iterations"     : 10,
             "relative_tolerance" : 1e-10,
             "line_search" : {
                 "line_search_type"           : "manual_stepping",
@@ -56,7 +56,13 @@
         },
         "output" : {
             "design_output_mode" : "WriteDesignSurface",
-            "nodal_results"      : [ "SHAPE_CHANGE" ],
+            "nodal_results"      : [ "NORMALIZED_SURFACE_NORMAL",
+                                    "DF1DX",
+                                    "DF1DX_MAPPED",
+                                    "CONTROL_POINT_UPDATE",
+                                    "CONTROL_POINT_CHANGE",
+                                    "SHAPE_UPDATE",
+                                    "SHAPE_CHANGE" ],
             "output_format" : {
                 "name": "gid"
             }

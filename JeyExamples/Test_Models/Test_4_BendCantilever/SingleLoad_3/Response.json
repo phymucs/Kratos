@@ -14,7 +14,7 @@
         "analysis_type"                   : "linear",
         "model_import_settings"           : {
             "input_type"     : "mdpa",
-            "input_filename" : "BendCantileverThick4N"
+            "input_filename" : "BendCantilever_SingleSurface"
         },
         "material_import_settings"        : {
             "materials_filename" : "StructuralMaterials.json"
@@ -52,11 +52,11 @@
             "kratos_module" : "KratosMultiphysics",
             "check"         : "DirectorVectorNonZero direction",
             "Parameters"    : {
-                "model_part_name" : "Struct_Load.PointLoad3D_PointLoad1",
+                "model_part_name" : "Struct_Load.PointLoad3D_PointLoad3",
                 "variable_name"   : "POINT_LOAD",
                 "interval"        : [0.0,"End"],
-                "modulus"         : 250.0,
-                "direction"       : [-1,0.0,0.0]
+                "modulus"         : 25.0,
+                "direction"       : [0,-1,0.0]
             }
         }],
         "list_other_processes"     : []
@@ -69,7 +69,7 @@
             "help"          : "This process writes postprocessing files for GiD",
             "Parameters"    : {
                 "model_part_name"        : "Struct_Load",
-                "output_name"            : "BendCantilever_Load1",
+                "output_name"            : "BendCantilever_Load3",
                 "postprocess_parameters" : {
                     "result_file_configuration" : {
                         "gidpost_flags"               : {

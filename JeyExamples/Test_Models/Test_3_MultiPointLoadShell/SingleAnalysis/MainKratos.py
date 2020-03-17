@@ -26,3 +26,9 @@ if __name__ == "__main__":
     
     optimizer = optimizer_factory.CreateOptimizer(parameters["optimization_settings"], model)
     optimizer.Optimize()
+
+    # Cleaning
+    kratos_utilities.DeleteDirectoryIfExisting("__pycache__")
+    kratos_utilities.DeleteDirectoryIfExisting(output_directory)
+    kratos_utilities.DeleteFileIfExisting(os.path.basename(original_directory)+".post.lst")
+    kratos_utilities.DeleteFileIfExisting(optimization_model_part_name+".time")

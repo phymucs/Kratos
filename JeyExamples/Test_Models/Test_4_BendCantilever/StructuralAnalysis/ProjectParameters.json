@@ -14,7 +14,7 @@
         "analysis_type"                   : "linear",
         "model_import_settings"           : {
             "input_type"     : "mdpa",
-            "input_filename" : "BendCantilever_SingleSurface"
+            "input_filename" : "BendCantilever"
         },
         "material_import_settings"        : {
             "materials_filename" : "StructuralMaterials.json"
@@ -55,8 +55,8 @@
                 "model_part_name" : "Structure.PointLoad3D_PointLoad1",
                 "variable_name"   : "POINT_LOAD",
                 "interval"        : [0.0,"End"],
-                "modulus"         : 250.0,
-                "direction"       : [-1,0.0,0.0]
+                "modulus"         : 25.0,
+                "direction"       : [0,-1,0.0]
             }
         }],
         "list_other_processes"     : []

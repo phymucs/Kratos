@@ -129,7 +129,7 @@ Begin Nodes
 End Nodes
 
 
-Begin Elements ShellThickElementCorotational3D4N// GUI group identifier: Structure
+Begin Elements ShellThickElement3D4N// GUI group identifier: Structure
         1          0   119   116   120   121 
         2          0   118   112   116   119 
         3          0   114   108   112   118 
