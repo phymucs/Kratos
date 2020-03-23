@@ -89,7 +89,7 @@
                 "variable_name"   : "POINT_LOAD",
                 "interval"        : [0.0,"End"],
                 "modulus"         : 25.0,
-                "direction"       : [0.0,0.0,-1]
+                "direction"       : [0.0,0.0,-1.0]
             }
         },{
             "python_module" : "assign_vector_by_direction_to_condition_process",

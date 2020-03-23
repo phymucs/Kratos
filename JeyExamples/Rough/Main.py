@@ -22,7 +22,7 @@ for i in range (0,2):
 for i in range (0,2):
     os.makedirs(original_directory+'/Opti_ITR_'+str(i))
     os.chdir(original_directory+'/Opti_ITR_'+str(i))
-    f= open("guru95.txt","w+")
+    f= open("guru965.txt","w+")
     print('done')
 
 # response_directory[response_id] = original_directory + "Response_", response_id

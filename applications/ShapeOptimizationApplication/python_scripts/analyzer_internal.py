@@ -105,10 +105,15 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
 
             response.Initialize()
 
-            # # Create Optimization Iteration Folder
-            # os.makedirs('Response_'+identifier +'/Opti_ITR_'+str(optimizationIteration))
-            # # Change Directory to ~/Response[i]/Opti_ITR_[i]/
-            # os.chdir('Response_'+identifier + '/Opti_ITR_'+str(optimizationIteration))
+            if optimizationIteration == 20:
+                # Create Optimization Iteration Folder
+                os.makedirs('Response_'+identifier +'/Opti_ITR_'+str(optimizationIteration))
+                # Change Directory to ~/Response[i]/Opti_ITR_[i]/
+                os.chdir('Response_'+identifier + '/Opti_ITR_'+str(optimizationIteration))
+                file = open("Modified_XYZ.txt","w+")
+                for node in model_part_nodes:
+                    file.write('\n\t' + str(node.Id) +'  '+ str(node.X) +' '+ str(node.Y) +' '+ str(node.Z))
+                file.close()
             
             response.InitializeSolutionStep()
 
@@ -138,8 +143,8 @@ class KratosInternalAnalyzer( AnalyzerBaseClass ):
             optimization_model_part.ProcessInfo.SetValue(KM.TIME, time_before_analysis)
             optimization_model_part.ProcessInfo.SetValue(KM.DELTA_TIME, delta_time_before_analysis)  
 
-            # # Change to Original folder
-            # os.chdir(self.original_directory)               
+            # Change to Original folder
+            os.chdir(self.original_directory)               
 
     # --------------------------------------------------------------------------
     def FinalizeAfterOptimizationLoop( self ):

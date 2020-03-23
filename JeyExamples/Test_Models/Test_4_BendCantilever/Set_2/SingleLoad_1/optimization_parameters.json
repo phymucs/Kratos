@@ -19,8 +19,8 @@
                         "damping_radius"        : 1.5
                     },{
                         "sub_model_part_name"   : "PointLoad3D_PointLoad1",
-                        "damp_X"                : false,
-                        "damp_Y"                : true,
+                        "damp_X"                : true,
+                        "damp_Y"                : false,
                         "damp_Z"                : true,
                         "damping_function_type" : "cosine",
                         "damping_radius"        : 1.5

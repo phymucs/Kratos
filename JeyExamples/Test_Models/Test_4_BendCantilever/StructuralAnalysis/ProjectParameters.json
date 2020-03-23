@@ -14,7 +14,7 @@
         "analysis_type"                   : "linear",
         "model_import_settings"           : {
             "input_type"     : "mdpa",
-            "input_filename" : "BendCantilever"
+            "input_filename" : "BendCantilever_SingleSurface_S"
         },
         "material_import_settings"        : {
             "materials_filename" : "StructuralMaterials.json"
@@ -56,7 +56,7 @@
                 "variable_name"   : "POINT_LOAD",
                 "interval"        : [0.0,"End"],
                 "modulus"         : 25.0,
-                "direction"       : [0,-1,0.0]
+                "direction"       : [0.0,-1.0,0.0]
             }
         }],
         "list_other_processes"     : []
@@ -69,7 +69,7 @@
             "help"          : "This process writes postprocessing files for GiD",
             "Parameters"    : {
                 "model_part_name"        : "Structure",
-                "output_name"            : "BendCantilever_SMA",
+                "output_name"            : "BendCantilever_SingleAnalysis_L1",
                 "postprocess_parameters" : {
                     "result_file_configuration" : {
                         "gidpost_flags"               : {
