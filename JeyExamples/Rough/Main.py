@@ -1,38 +1,54 @@
-import shutil
-import glob, os
-import KratosMultiphysics.kratos_utilities as kratos_utilities
+import matplotlib.pyplot as plt
+import csv
 
+# ---------------------------------------------------
 
+optimization_log_name_1 = 'optimization_log_S.csv'
+optimization_log_name_2 = 'optimization_log_M.csv'
+fig_name = 'Convergence.png'
+plot_label_1 = 'MultiLoad-SingleAnalysis'
+plot_label_2 = 'MultiLoad-MultiAnalysis'
+plot_title = 'Response\nConvergence Graph'
 
-original_directory = os.getcwd()
+# ---------------------------------------------------
 
-subfolder_names = ["jey", "kibs"]
-# for subfolder_name in subfolder_names:
-#     dst = os.path.join(str(original_directory), ("Folder_" + subfolder_name))
-#     os.mkdir(dst)
-#     os.chdir(dst)
-#     f= open("guru99.txt","w+")
-#     os.chdir(original_directory)
-# os.mkdir('monster')
-# os.makedirs('monster/jey')
+x = []
+y = []
+with open(optimization_log_name_1, 'r') as csvfile:
+    reader = csv.reader(csvfile, delimiter=',')
+    lineN = 0
+    x = []
+    y = []
+    z = []
+    for line in reader:
+        lineN += 1
+        if lineN != 1:
+            x.append(int(line[0]))
+            y.append(float(line[1]))
+            z.append(float(line[2]))
 
-for i in range (0,2):
-    print(i)
-    shutil.rmtree('Opti_ITR_'+str(i))
-for i in range (0,2):
-    os.makedirs(original_directory+'/Opti_ITR_'+str(i))
-    os.chdir(original_directory+'/Opti_ITR_'+str(i))
-    f= open("guru965.txt","w+")
-    print('done')
+plt.plot(x,y, 'b8-', linewidth=2, markersize=6.5, label= plot_label_1)
+# plt.plot(x,z, 'b8-', linewidth=2, markersize=6.5, label= plot_label_1)
 
-# response_directory[response_id] = original_directory + "Response_", response_id
+with open(optimization_log_name_2, 'r') as csvfile:
+    reader = csv.reader(csvfile, delimiter=',')
+    lineN = 0
+    x = []
+    y = []
+    z = []
+    for line in reader:
+        lineN += 1
+        if lineN != 1:
+            x.append(int(line[0]))
+            y.append(float(line[1]))
+            z.append(float(line[2]))
 
-# os.mkdir('Res')
-#                                                                    
-# os.makedirs(str(response_directory[response_id])+'/Opti_ITR_'+str(optimizationIteration))
-#                                                                     
-# os.chdir(str(response_directory[response_id]) + '/Opti_ITR_'+str(optimizationIteration))
+plt.plot(x,y, 'r*--', linewidth=2, markersize=6, label= plot_label_2)
+# plt.plot(x,z, 'r*--', linewidth=2, markersize=6, label= plot_label_2)
 
-# self.response_functions[response_id] = csm_response_factory.CreateResponseFunction(response_id, response_settings, self.model) 
-
-# os.chdir(original_directory) 
+plt.xlabel('Iterations')
+plt.ylabel('Response Value')
+plt.title(plot_title)
+plt.legend()
+plt.show()
+plt.savefig(fig_name)
