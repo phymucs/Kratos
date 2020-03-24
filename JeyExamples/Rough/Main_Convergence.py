@@ -1,19 +1,20 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import csv
 
 # ---------------------------------------------------
 
-optimization_log_name_1 = 'optimization_log_S.csv'
-optimization_log_name_2 = 'optimization_log_M.csv'
+optimization_log_name_1 = 'optimization_logS15.csv'
+optimization_log_name_2 = 'optimization_logM15.csv'
 fig_name = 'Convergence.png'
-plot_label_1 = 'MultiLoad-SingleAnalysis'
-plot_label_2 = 'MultiLoad-MultiAnalysis'
+# fig_name = 'Reduction.png'
+plot_label_1 = 'MultiLoad-SingleAnalysis (r=1.5)'
+plot_label_2 = 'MultiLoad-MultiAnalysis (r=1.5)'
 plot_title = 'Response\nConvergence Graph'
+# plot_title = 'Response Reduction (%)\nConvergence Graph'
 
 # ---------------------------------------------------
 
-x = []
-y = []
 with open(optimization_log_name_1, 'r') as csvfile:
     reader = csv.reader(csvfile, delimiter=',')
     lineN = 0
@@ -48,6 +49,8 @@ plt.plot(x,y, 'r*--', linewidth=2, markersize=6, label= plot_label_2)
 
 plt.xlabel('Iterations')
 plt.ylabel('Response Value')
+# plt.ylabel('Response Reduction %')
+plt.xticks(np.arange(0, 21, step=1))
 plt.title(plot_title)
 plt.legend()
 plt.show()
