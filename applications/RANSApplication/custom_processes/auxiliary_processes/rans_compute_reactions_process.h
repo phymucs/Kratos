@@ -92,7 +92,7 @@ public:
     ///@name Operations
     ///@{
     // void ExecuteInitialize() override;
-
+    void ExecuteInitialize() override;
     void ExecuteFinalizeSolutionStep() override;
 
     int Check() override;
@@ -167,7 +167,7 @@ private:
     std::string mModelPartName;
 
     int mEchoLevel;
-
+    bool mPeriodic;
     ///@}
     ///@name Private Operators
     ///@{

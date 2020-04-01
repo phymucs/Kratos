@@ -56,13 +56,13 @@ class TurbulenceKEpsilonConfiguration(
             "flow_parameters"].ValidateAndAssignDefaults(
                 default_settings["flow_parameters"])
         self.model_settings = parameters["model_settings"]
-
+        
         if (self.model_settings["use_high_re_elements"].GetBool()):
             self.model_elements_list = [
                 "RansEvmKEpsilonK", "RansEvmKEpsilonEpsilon"
             ]
             self.model_conditions_list = [
-                "Condition", "RansEvmKEpsilonEpsilonWall"
+                "LineCondition", "RansEvmKEpsilonEpsilonWall"
             ]
         else:
             self.model_elements_list = [

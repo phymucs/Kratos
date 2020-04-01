@@ -40,18 +40,61 @@ RansComputeReactionsProcess::RansComputeReactionsProcess(
     Parameters default_parameters = Parameters(R"(
         {
             "model_part_name"         : "PLEASE_SPECIFY_MODEL_PART_NAME",
-            "echo_level"              : 0
+            "echo_level"              : 0,
+            "consider_periodic"       : false
         })");
 
     mrParameters.ValidateAndAssignDefaults(default_parameters);
 
     mEchoLevel = mrParameters["echo_level"].GetInt();
     mModelPartName = mrParameters["model_part_name"].GetString();
-
+    mPeriodic = mrParameters["consider_periodic"].GetBool();
 
     KRATOS_CATCH("");
 }
 
+void RansComputeReactionsProcess::ExecuteInitialize()
+{
+    
+    if (mPeriodic)
+    {
+    ModelPart::NodesContainerType& r_nodes =
+    mrModel.GetModelPart(mModelPartName).Nodes();
+    const int number_of_nodes = r_nodes.size();
+ #pragma omp parallel for
+    for (int i_node = 0; i_node < number_of_nodes; ++i_node)
+    {
+        NodeType& r_node = *(r_nodes.begin() + i_node);
+        if (r_node.Is(PERIODIC))
+        {
+            int& r_master_patch_index = r_node.FastGetSolutionStepValue(PATCH_INDEX);
+            if (r_node.Id() < r_node.FastGetSolutionStepValue(PATCH_INDEX))
+            {
+              
+
+                array_1d<double, 3>& master_normal =
+                    r_node.FastGetSolutionStepValue(NORMAL);
+               
+                NodeType& periodic_node = mrModel.GetModelPart(mModelPartName).GetNode(r_node.FastGetSolutionStepValue(PATCH_INDEX));
+                
+                array_1d<double, 3>& periodic_normal =
+                    periodic_node.FastGetSolutionStepValue(NORMAL);
+                    
+                double magnitude_normal_periodic =
+                    norm_2(periodic_normal) + norm_2(master_normal);
+                
+                periodic_node.FastGetSolutionStepValue(NORMAL) =
+                    periodic_normal * (magnitude_normal_periodic / norm_2(periodic_normal));
+                    
+                r_node.FastGetSolutionStepValue(NORMAL) =
+                    master_normal * (magnitude_normal_periodic / norm_2(master_normal));
+                    
+            }
+        }
+    }
+    }
+    
+}
 
 void RansComputeReactionsProcess::ExecuteFinalizeSolutionStep()
 {
@@ -115,7 +158,6 @@ int RansComputeReactionsProcess::Check()
 
     RansCheckUtilities::CheckIfVariableExistsInModelPart(r_model_part, REACTION);
     RansCheckUtilities::CheckIfVariableExistsInModelPart(r_model_part, DENSITY);
-    RansCheckUtilities::CheckIfVariableExistsInModelPart(r_model_part, FRICTION_VELOCITY);
     RansCheckUtilities::CheckIfVariableExistsInModelPart(r_model_part, PRESSURE);
     RansCheckUtilities::CheckIfVariableExistsInModelPart(r_model_part, NORMAL);
 
@@ -158,7 +200,7 @@ void RansComputeReactionsProcess::CalculateReactionValues(ModelPart::ConditionTy
         }
     }
 
-    //mrModel.GetModelPart(mModelPartName).GetCommunicator().AssembleCurrentData(REACTION);
+    mrModel.GetModelPart(mModelPartName).GetCommunicator().AssembleCurrentData(REACTION);
 
 }
 
