@@ -19,6 +19,7 @@
 
 #include "custom_elements/shell_3p_element.h"
 #include "custom_elements/iga_truss_element.h"
+#include "custom_elements/membrane_discrete_element.h"
 #include "custom_elements/shell_kl_discrete_element.h"
 
 //conditions
@@ -101,6 +102,7 @@ private:
 
     const Shell3pElement mShell3pElement;
     const IgaTrussElement mIgaTrussElement;
+    const MembraneDiscreteElement mMembraneDiscreteElement;
     const ShellKLDiscreteElement mShellKLDiscreteElement;
 
     //Conditions

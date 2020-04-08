@@ -20,6 +20,8 @@ KratosIgaApplication::KratosIgaApplication()
         new Geometry<Node<3>>(Element::GeometryType::PointsArrayType(1))))
     , mIgaTrussElement(0, Element::GeometryType::Pointer(
         new Geometry<Node<3>>(Element::GeometryType::PointsArrayType(1))))
+    , mMembraneDiscreteElement(0, Element::GeometryType::Pointer(
+        new Geometry<Node<3>>(Element::GeometryType::PointsArrayType(1)))) 
     , mShellKLDiscreteElement(0, Element::GeometryType::Pointer(
         new Geometry<Node<3>>(Element::GeometryType::PointsArrayType(1))))
     , mLoadCondition(0, Condition::GeometryType::Pointer(
@@ -35,6 +37,7 @@ void KratosIgaApplication::Register() {
     // ELEMENTS
     KRATOS_REGISTER_ELEMENT("Shell3pElement", mShell3pElement)
     KRATOS_REGISTER_ELEMENT("IgaTrussElement", mIgaTrussElement)
+    KRATOS_REGISTER_ELEMENT("MembraneDiscreteElement", mMembraneDiscreteElement)
     KRATOS_REGISTER_ELEMENT("ShellKLDiscreteElement", mShellKLDiscreteElement)
 
     // CONDITIONS
